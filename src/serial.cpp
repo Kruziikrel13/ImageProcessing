@@ -8,6 +8,7 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
+#include <filesystem>
 
 #ifdef DEBUG
 #include "utils/MemCheck.h"
@@ -15,16 +16,9 @@
 
 /*
 read contents of directory and place the names in vector*/
-int GetDirFileNames(const std::string dir, std::vector<std::string>& files) {
-    DIR*    dp;
-    dirent* dirp;
-    if (!(dp = opendir(dir.c_str()))) {
-        std::cout << "Could not open directory \"" << dir << "\"\n";
-        exit(4);
-    }
-
-    while ((dirp = readdir(dp)))
-        files.push_back(std::string(dirp->d_name));
+static int getDirFileNames(const std::string dir, std::vector<std::string>& files) {
+    for (const auto& entry : std::filesystem::directory_iterator(dir))
+        files.emplace_back(entry.path().filename().string());
 
     return 1;
 }
@@ -60,7 +54,7 @@ int main(int argc, char** argv) {
     // hot spot timer. Measures the part of code which will be parallelized
     Timer parallelTimer;
 
-    if (GetDirFileNames(argv[1], imageName))
+    if (getDirFileNames(argv[1], imageName))
 
         try {
             parallelTimer.start();
