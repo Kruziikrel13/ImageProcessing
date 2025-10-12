@@ -12,7 +12,7 @@ In order to see the advantages of multithreading, the first execution mode is se
 
 In order to compile the serial implementation run the following command
 ```sh
-$ make -f serialMakefile
+$ make
 ```
 
 Dependencies

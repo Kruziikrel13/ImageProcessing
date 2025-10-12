@@ -5,7 +5,7 @@ LD = g++
 #linker flags
 LDFLAGS = -Wall -g
 #compiler flags
-CFLAGS = -Wall -c -g -O3 -std=c++98
+CFLAGS = -Wall -c -g -std=c++98
 #serial libraries
 S_LIBS = -ltiff -ljpeg -lpng -lz 
 
