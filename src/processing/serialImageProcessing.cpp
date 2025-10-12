@@ -38,9 +38,9 @@ namespace IMAGE {
         static void rotate180(IMAGE::ImageRaster& raster) {
 
             IMAGE::ImageRaster tempRaster;
-            unsigned int       width             = raster.getWidth();
-            unsigned int       height            = raster.getHeight();
-            unsigned int       samples_per_pixel = raster.getSamplesPerPixel();
+            int                width             = raster.getWidth();
+            int                height            = raster.getHeight();
+            int                samples_per_pixel = raster.getSamplesPerPixel();
 
             tempRaster.createRaster(width, height, samples_per_pixel);
 
@@ -48,13 +48,13 @@ namespace IMAGE {
             unsigned char* from = raster.getRasterPointer();
 
             // copy first row from raster to last row from new raster
-            for (unsigned int firstRow = 0, lastRow = height - 1; firstRow < height && lastRow >= 0; firstRow++, lastRow--)
+            for (int firstRow = 0, lastRow = height - 1; firstRow < height && lastRow >= 0; firstRow++, lastRow--)
                 // 1st pixel from 1st row from original raster is placed in last pixel in
                 // last row in the new raster
-                for (unsigned int firstColumn = 0, lastColumn = width * samples_per_pixel - samples_per_pixel; firstColumn < width * samples_per_pixel && lastColumn >= 0;
+                for (int firstColumn = 0, lastColumn = (width * samples_per_pixel) - samples_per_pixel; firstColumn < width * samples_per_pixel && lastColumn >= 0;
                      firstColumn += samples_per_pixel, lastColumn -= samples_per_pixel)
                     // assign each component of every pixel
-                    for (unsigned int i = 0; i < samples_per_pixel; i++)
+                    for (int i = 0; i < samples_per_pixel; i++)
                         to[width * samples_per_pixel * lastRow + lastColumn + i] = from[width * samples_per_pixel * firstRow + firstColumn + i];
 
             raster.attachRaster(tempRaster);
