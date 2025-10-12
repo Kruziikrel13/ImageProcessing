@@ -8,3 +8,7 @@ tags
 pictures/
 .cache/clangd/index
 .direnv
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
