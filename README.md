@@ -5,7 +5,7 @@ The project explores the advantages of multithreading in image processing while 
 
 Timers are used in all implementations in order to accurately measure the difference of implementations. At the end of each execution execution times are printed to the standard output.
 
-Serial implementaion
+Serial implementation
 --------------------
 
 In order to see the advantages of multithreading, the first execution mode is serial where a single operation is applied to a number of images and the processing is performed on a single thread.
