@@ -23,17 +23,17 @@ namespace IMAGE {
 #endif
 
       public:
-        JPEGimage() throw();
+        JPEGimage() noexcept;
 
-        ~JPEGimage() throw();
+        ~JPEGimage() noexcept;
 
-        void open(const std::string&, const char) throw(IMAGE::file_io_failed);
+        void open(const std::string&, const char);
 
         void close();
 
-        void readImageRaster() throw(IMAGE::bad_alloc, IMAGE::empty_image);
+        void readImageRaster();
 
-        void writeRasterToImage() throw(IMAGE::empty_raster);
+        void writeRasterToImage();
 
     }; // and of class JPEGimage
 

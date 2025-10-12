@@ -18,19 +18,19 @@ namespace IMAGE {
     AutoCounter<PNGimage> PNGimage::counter;
 #endif
 
-    PNGimage::PNGimage() throw() : imageFile_m(NULL) {
+    PNGimage::PNGimage() noexcept : imageFile_m(NULL) {
 #ifdef DEBUG
         counter.increase();
 #endif
     }
 
-    PNGimage::~PNGimage() throw() {
+    PNGimage::~PNGimage() noexcept {
 #ifdef DEBUG
         counter.decrease();
 #endif
     }
 
-    void PNGimage::open(const std::string& name, const char mode) throw(IMAGE::image_format_error, file_io_failed) {
+    void PNGimage::open(const std::string& name, const char mode) {
 
         name_m = name;
         // read mode
@@ -111,7 +111,7 @@ namespace IMAGE {
             fclose(imageFile_m);
     }
 
-    void PNGimage::readImageRaster() throw(IMAGE::bad_alloc, IMAGE::image_format_error, IMAGE::empty_image) {
+    void PNGimage::readImageRaster() {
 
         if (!imageFile_m)
             throw IMAGE::empty_image("Tried to read from unopened image " + name_m);
@@ -165,7 +165,7 @@ namespace IMAGE {
         free(row_pointers);
     }
 
-    void PNGimage::writeRasterToImage() throw(IMAGE::image_format_error, IMAGE::empty_raster) {
+    void PNGimage::writeRasterToImage() {
 
         if (!raster.hasRaster())
             throw IMAGE::empty_raster("Raster of image " + name_m + " is empty");

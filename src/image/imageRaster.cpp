@@ -22,7 +22,7 @@ namespace IMAGE {
 #endif
     // default contructor
 
-    ImageRaster::ImageRaster() throw() : width_m(0), height_m(0), samples_per_pixel_m(0), total_pixels_m(0), raster_m(NULL), has_raster_m(false) {
+    ImageRaster::ImageRaster() noexcept : width_m(0), height_m(0), samples_per_pixel_m(0), total_pixels_m(0), raster_m(nullptr), has_raster_m(false) {
 #ifdef DEBUG
         counter.increase();
 #endif
@@ -30,7 +30,7 @@ namespace IMAGE {
 
     // destructor .if there is a raster created for this object the momory should
     // be free with the destructor or a call to destroyRaster
-    ImageRaster::~ImageRaster() throw() {
+    ImageRaster::~ImageRaster() noexcept {
 #ifdef DEBUG
         counter.decrease();
 #endif
@@ -38,7 +38,7 @@ namespace IMAGE {
         destroyRaster();
     }
 
-    void ImageRaster::allocateRaster() throw(IMAGE::bad_alloc) {
+    void ImageRaster::allocateRaster() {
 
         // destroy an active raster if exists
         this->destroyRaster();
@@ -53,7 +53,7 @@ namespace IMAGE {
         }
     }
 
-    void ImageRaster::copyRaster(const ImageRaster& copy) throw() {
+    void ImageRaster::copyRaster(const ImageRaster& copy) noexcept {
 
         if (copy.hasRaster()) {
 
@@ -87,7 +87,7 @@ namespace IMAGE {
     /*create area for the new raster.If there is already an active Raster it is
 destroyed first and then the new area is created .*/
 
-    void ImageRaster::createRaster(const ImageRaster& copy) throw(IMAGE::bad_alloc, IMAGE::empty_raster) {
+    void ImageRaster::createRaster(const ImageRaster& copy) {
         // if the copy raster is empty
         if (!copy.hasRaster())
             throw IMAGE::empty_raster();
@@ -102,8 +102,7 @@ destroyed first and then the new area is created .*/
         copyRaster(copy);
     }
 
-    void ImageRaster::createRaster(const unsigned int w, const unsigned int h, const unsigned int s) throw(IMAGE::bad_alloc, IMAGE::invalid_argument) {
-
+    void ImageRaster::createRaster(const unsigned int w, const unsigned int h, const unsigned int s) {
         // checking for valid arguments
         if (s < 3 || s > 4)
             throw IMAGE::invalid_argument("Wrong arguments for creation of raster");
@@ -117,14 +116,14 @@ destroyed first and then the new area is created .*/
         allocateRaster();
     }
 
-    void ImageRaster::createRaster() throw(IMAGE::bad_alloc) {
+    void ImageRaster::createRaster() {
         // destroy an active raster if exists
         total_pixels_m = width_m * height_m;
 
         allocateRaster();
     }
 
-    void ImageRaster::destroyRaster() throw() {
+    void ImageRaster::destroyRaster() noexcept {
         if (has_raster_m) {
             delete[] raster_m;
             has_raster_m = false;
@@ -138,7 +137,7 @@ destroyed first and then the new area is created .*/
             return NULL;
     }
 
-    int ImageRaster::attachRaster(ImageRaster& from) throw() {
+    int ImageRaster::attachRaster(ImageRaster& from) noexcept {
         // non active raster
         if (!from.hasRaster())
             return 1;
@@ -166,7 +165,7 @@ destroyed first and then the new area is created .*/
     }
 
     // change from active to inactive raster
-    void ImageRaster::detachRaster() throw() {
+    void ImageRaster::detachRaster() noexcept {
 
         this->destroyRaster();
         // has_raster_m = false;

@@ -11,19 +11,19 @@ namespace IMAGE {
 
     // public
 
-    JPEGimage::JPEGimage() throw() : imageFile_m(NULL) {
+    JPEGimage::JPEGimage() noexcept : imageFile_m(NULL) {
 #ifdef DEBUG
         counter.increase();
 #endif
     }
 
-    JPEGimage::~JPEGimage() throw() {
+    JPEGimage::~JPEGimage() noexcept {
 #ifdef DEBUG
         counter.decrease();
 #endif
     }
 
-    void JPEGimage::open(const std::string& n, const char mode) throw(IMAGE::file_io_failed) {
+    void JPEGimage::open(const std::string& n, const char mode) {
 
         name_m = n;
         if (mode == 'r') {
@@ -61,7 +61,7 @@ namespace IMAGE {
             fclose(imageFile_m);
     }
 
-    void JPEGimage::readImageRaster() throw(IMAGE::bad_alloc, IMAGE::empty_image) {
+    void JPEGimage::readImageRaster() {
 
         if (!imageFile_m)
             throw IMAGE::empty_image("Tried to read from unopened image " + name_m);
@@ -106,7 +106,7 @@ namespace IMAGE {
         jpeg_destroy_decompress(&decompressor);
     }
 
-    void JPEGimage::writeRasterToImage() throw(IMAGE::empty_raster) {
+    void JPEGimage::writeRasterToImage() {
 
         if (!raster.hasRaster())
             throw IMAGE::empty_raster("Raster of image " + name_m + " is empty");

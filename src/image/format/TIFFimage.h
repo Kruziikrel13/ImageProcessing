@@ -35,17 +35,17 @@ extra information and functionality to support the tiff format.
 #endif
 
       public:
-        TIFFimage() throw();
+        TIFFimage() noexcept;
 
-        ~TIFFimage() throw();
+        ~TIFFimage() noexcept;
 
-        void open(const std::string&, const char) throw(IMAGE::file_io_failed);
+        void       open(const std::string&, const char);
 
-        void close();
+        void       close();
 
-        void readImageRaster() throw(IMAGE::bad_alloc, IMAGE::image_format_error, IMAGE::empty_image);
+        void       readImageRaster();
 
-        void writeRasterToImage() throw(IMAGE::image_format_error, IMAGE::empty_raster);
+        void       writeRasterToImage();
 
     }; // end of class TIFFimage
 

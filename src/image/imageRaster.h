@@ -75,9 +75,9 @@ namespace IMAGE {
 
         // called from createRaster functions to allocate enough space
         // for the raster.Returns 0 in success and 1 otherwise
-        void allocateRaster() throw(IMAGE::bad_alloc);
+        void allocateRaster();
 
-        void copyRaster(const ImageRaster&) throw();
+        void copyRaster(const ImageRaster&) noexcept;
 
 #ifdef DEBUG
         static AutoCounter<ImageRaster> counter;
@@ -85,10 +85,10 @@ namespace IMAGE {
 
       public:
         // default constructor only to set the raster pointer to NULL
-        ImageRaster() throw();
+        ImageRaster() noexcept;
 
         // destructor
-        ~ImageRaster() throw();
+        ~ImageRaster() noexcept;
 
         // the only way to have access to the raster pointer
         unsigned char* getRasterPointer() const;
@@ -96,28 +96,28 @@ namespace IMAGE {
         /*used  only within image object
   setWidth , setHeight , setSamplesPerPIxel must be called before
   a call to createRaster() */
-        void createRaster() throw(IMAGE::bad_alloc);
+        void createRaster();
 
         /*you have to ask explicitly for ther raster to be created
   Raster is created from an open Image.If there was an old active raster
   it is first destroyed and then the new one is created*/
-        void createRaster(const ImageRaster&) throw(IMAGE::bad_alloc, IMAGE::empty_raster);
+        void createRaster(const ImageRaster&);
 
         /*create a new raster with only width , height and samples per pixel
   the area is created but there are is no image
   used to create individual rasters without being part of an image*/
-        void createRaster(const unsigned int, const unsigned int, const unsigned int) throw(IMAGE::bad_alloc, IMAGE::invalid_argument);
+        void createRaster(const unsigned int, const unsigned int, const unsigned int);
 
         // attach a new raster without copying it.The  other's raster are is destroyed
         // and the new one is attached to raster
-        int attachRaster(ImageRaster&) throw();
+        int attachRaster(ImageRaster&) noexcept;
 
         /*detach raster area from raster.deallocate area from raster
   and set values to 0*/
-        void detachRaster() throw();
+        void detachRaster() noexcept;
 
         // you can destroy the raster and set it to initial values
-        void destroyRaster() throw();
+        void destroyRaster() noexcept;
 
         // get methods for every private member
         unsigned int getWidth() const {

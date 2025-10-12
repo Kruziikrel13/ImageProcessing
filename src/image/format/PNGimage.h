@@ -31,17 +31,17 @@ namespace IMAGE {
         static AutoCounter<PNGimage> counter;
 #endif
       public:
-        PNGimage() throw();
+        PNGimage() noexcept;
 
-        ~PNGimage() throw();
+        ~PNGimage() noexcept;
 
-        void open(const std::string&, const char) throw(IMAGE::image_format_error, IMAGE::file_io_failed);
+        void open(const std::string&, const char);
 
         void close();
 
-        void readImageRaster() throw(IMAGE::bad_alloc, IMAGE::image_format_error, IMAGE::empty_image);
+        void readImageRaster();
 
-        void writeRasterToImage() throw(IMAGE::image_format_error, IMAGE::empty_raster);
+        void writeRasterToImage();
 
     }; // and of class PNGimage
 

@@ -15,20 +15,20 @@ namespace IMAGE {
 #ifdef DEBUG
     AutoCounter<Image> Image::imageCounter;
 #endif
-    Image::Image() throw() {
+    Image::Image() noexcept {
 
 #ifdef DEBUG
         imageCounter.increase();
 #endif
     }
 
-    Image::~Image() throw() {
+    Image::~Image() noexcept {
 #ifdef DEBUG
         imageCounter.decrease();
 #endif
     }
 
-    Image* Image::createInstance(const std::string& s) throw(IMAGE::bad_alloc, IMAGE::not_supported_format) {
+    Image* Image::createInstance(const std::string& s) {
 
         // chekcing if the format image is supported
 

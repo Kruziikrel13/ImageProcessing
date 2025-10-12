@@ -10,19 +10,19 @@ namespace IMAGE {
 
     // public
 
-    TIFFimage::TIFFimage() throw() : imageFile_m(NULL) {
+    TIFFimage::TIFFimage() noexcept : imageFile_m(NULL) {
 #ifdef DEBUG
         counter.increase();
 #endif
     }
 
-    TIFFimage::~TIFFimage() throw() {
+    TIFFimage::~TIFFimage() noexcept {
 #ifdef DEBUG
         counter.decrease();
 #endif
     }
 
-    void TIFFimage::open(const std::string& n, const char mode) throw(IMAGE::file_io_failed) {
+    void TIFFimage::open(const std::string& n, const char mode) {
 
         imageFile_m = TIFFOpen(n.c_str(), &mode);
         // failed to open
@@ -47,7 +47,7 @@ namespace IMAGE {
             TIFFClose(imageFile_m);
     }
 
-    void TIFFimage::readImageRaster() throw(IMAGE::bad_alloc, IMAGE::image_format_error, IMAGE::empty_image) {
+    void TIFFimage::readImageRaster() {
 
         // checking for open image
         if (!imageFile_m)
@@ -64,7 +64,7 @@ namespace IMAGE {
             throw IMAGE::image_format_error("TIFF image internal error   " + name_m);
     }
 
-    void TIFFimage::writeRasterToImage() throw(IMAGE::image_format_error, IMAGE::empty_raster) {
+    void TIFFimage::writeRasterToImage() {
 
         // if there is no raster return
         if (!raster.hasRaster())

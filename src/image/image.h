@@ -32,19 +32,19 @@ namespace IMAGE {
         // name of the image
         std::string name_m;
 
-        Image() throw();
+        Image() noexcept;
 
       public:
         // public raster object for every image object
         ImageRaster   raster;
 
-        static Image* createInstance(const std::string&) throw(IMAGE::bad_alloc, IMAGE::not_supported_format);
+        static Image* createInstance(const std::string&);
 
         // the contructor is used only to set the private members to NULL
-        //	Image() throw();//doesnt throw any kind of exception
+        //	Image() noexcept;//doesnt throw any kind of exception
 
         // if the raster is not destroyed explicilty the destuctor must delete it.
-        virtual ~Image() throw();
+        virtual ~Image() noexcept;
 
         virtual void open(const std::string&, const char) = 0;
 
