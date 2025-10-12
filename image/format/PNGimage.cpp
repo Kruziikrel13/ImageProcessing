@@ -51,7 +51,11 @@ void PNGimage::open(const std::string &name,
 
     char header[8]; // 8 is the maximum size that can be checked
 
-    fread(header, 1, 8, imageFile_m);
+    size_t bytesRead = fread(header, 1, 8, imageFile_m);
+    if (bytesRead != 8) {
+      throw IMAGE::file_io_failed("Failed to read PNG header from file " +
+                                  name_m);
+    }
     if (png_sig_cmp((unsigned char *)header, 0, 8))
       throw IMAGE::image_format_error("PNG internal error in image   " +
                                       name_m);
