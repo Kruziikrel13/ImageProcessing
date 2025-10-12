@@ -6,3 +6,5 @@ tags
 
 *.o
 pictures/
+.cache/clangd/index
+.direnv
