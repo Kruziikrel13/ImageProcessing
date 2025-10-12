@@ -1,6 +1,6 @@
-#include "ImageIOstream.h"
-#include "../../utils/timer.h"
-#include <stdlib.h>
+#include "image/streaming/ImageIOstream.h"
+#include "utils/timer.h"
+#include <cstdlib>
 namespace IMAGE {
 
     // constructor

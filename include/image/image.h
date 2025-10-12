@@ -1,5 +1,4 @@
-#ifndef _IMAGE_BASE_H_
-#define _IMAGE_BASE_H_
+#pragma once
 
 #include "imageRaster.h"
 #include "imgError.h"
@@ -57,5 +56,3 @@ namespace IMAGE {
     }; // end of Image
 
 } // end of namespace IMAGE
-
-#endif

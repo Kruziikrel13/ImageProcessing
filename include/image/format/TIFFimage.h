@@ -1,5 +1,4 @@
-#ifndef _TIFF_IMAGE_H_
-#define _TIFF_IMAGE_H_
+#pragma once
 
 #include "../image.h"
 #include "../imageRaster.h"
@@ -48,5 +47,3 @@ extra information and functionality to support the tiff format.
     }; // end of class TIFFimage
 
 } // end of namespace IMAGE
-
-#endif

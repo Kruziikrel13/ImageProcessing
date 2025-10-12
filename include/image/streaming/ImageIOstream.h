@@ -1,15 +1,10 @@
-#ifndef IMAGE_IO_STREAM
-#define IMAGE_IO_STREAM
+#pragma once
 
-#include "../../processing/imageProcessing.h"
-#include "../image.h"
-#include "../imageRaster.h"
+#include "processing/imageProcessing.h"
+#include "image/imageRaster.h"
 #include <dirent.h>
-#include <iostream>
-#include <omp.h>
 #include <queue>
 #include <utility>
-#include <vector>
 
 namespace IMAGE {
 
@@ -84,5 +79,3 @@ namespace IMAGE {
     };
 
 } // end of namespace IMAGE
-
-#endif

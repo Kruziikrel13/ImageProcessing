@@ -1,7 +1,6 @@
-#ifndef _PNGIMAGE_H_
-#define _PNGIMAGE_H_
+#pragma once
 
-#include "../image.h"
+#include "image/image.h"
 #include "png.h"
 
 namespace IMAGE {
@@ -46,5 +45,3 @@ namespace IMAGE {
     }; // and of class PNGimage
 
 } // end of namespace IMAGE
-
-#endif

@@ -1,13 +1,12 @@
-#ifndef _IMG_H_
-#define _IMG_H_
+#pragma once
 
-#include "../processing/imageProcessing.h"
-#include "format/JPEGimage.h"
-#include "format/PNGimage.h"
-#include "format/TIFFimage.h"
-#include "image.h"
-#include "imageRaster.h"
-#include "imgError.h"
+#include "processing/imageProcessing.h"
+#include "image/format/JPEGimage.h"
+#include "image/format/PNGimage.h"
+#include "image/format/TIFFimage.h"
+#include "image/image.h"
+#include "image/imageRaster.h"
+#include "image/imgError.h"
 
 const std::string BRIGHTNESS("-brightness");
 const std::string REVERSE("-reverse");
@@ -20,5 +19,3 @@ const std::string ROTATE("-rotate");
 const std::string ZOOM("-zoom");
 const std::string SCALE("-scale");
 const std::string BLUR("-blur");
-
-#endif

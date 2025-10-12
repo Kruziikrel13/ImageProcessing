@@ -1,5 +1,4 @@
-#ifndef _IMG_ERROR_H_
-#define _IMG_ERROR_H_
+#pragma once
 
 #include <exception>
 #include <new>
@@ -45,5 +44,3 @@ namespace IMAGE {
     };
 
 } // end of namespace IMAGE
-
-#endif

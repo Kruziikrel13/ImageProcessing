@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <stdlib.h>
+#include <cstdlib>
 #include <string>
 #include <unistd.h>
 #include <vector>

@@ -1,5 +1,4 @@
-#ifndef _AUTOCOUNTER_H_
-#define _AUTOCOUNTER_H_
+#pragma once
 
 #include <iostream>
 #include <typeinfo>
@@ -38,5 +37,3 @@ class AutoCounter {
                      "*********************************\n";
     }
 };
-
-#endif

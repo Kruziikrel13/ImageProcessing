@@ -1,7 +1,7 @@
-#include "image.h"
-#include "format/JPEGimage.h"
-#include "format/PNGimage.h"
-#include "format/TIFFimage.h"
+#include "image/image.h"
+#include "image/format/JPEGimage.h"
+#include "image/format/PNGimage.h"
+#include "image/format/TIFFimage.h"
 #include <iostream>
 #include <string>
 

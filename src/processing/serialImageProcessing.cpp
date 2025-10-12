@@ -1,6 +1,5 @@
-#include "imageProcessing.h"
-#include <iostream>
-#include <string.h>
+#include "processing/imageProcessing.h"
+#include <cstring>
 
 // #include <cilk/cilk.h>
 // #include <cilk/cilk_api.h>

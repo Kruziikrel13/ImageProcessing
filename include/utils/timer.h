@@ -1,10 +1,9 @@
-#ifndef _TIMER_H_
-#define _TIMER_H_
+#pragma once
 
 #include <iostream>
 #include <sys/time.h>
 #include <sys/times.h>
-#include <time.h>
+#include <ctime>
 #include <unistd.h>
 
 class Timer {
@@ -28,5 +27,3 @@ class Timer {
         return sys;
     }
 };
-
-#endif

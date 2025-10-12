@@ -1,5 +1,4 @@
-#ifndef _IMAGE_RASTER_H_
-#define _IMAGE_RASTER_H_
+#pragma once
 
 #include "imgError.h"
 #ifdef DEBUG
@@ -189,5 +188,3 @@ namespace IMAGE {
     }; // end of class ImageRaster
 
 } // end of namespace IMAGE
-
-#endif

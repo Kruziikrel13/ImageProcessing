@@ -1,10 +1,9 @@
-#ifndef _JPEG_IMAGE_H_
-#define _JPEG_IMAGE_H_
+#pragma once
 
-#include "../image.h"
-#include "../imageRaster.h"
+#include "image/image.h"
+#include "image/imageRaster.h"
 #include "jpeglib.h"
-#include <stdio.h>
+#include <cstdio>
 
 namespace IMAGE {
 
@@ -38,5 +37,3 @@ namespace IMAGE {
     }; // and of class JPEGimage
 
 } // end of namespace IMAGE
-
-#endif

@@ -1,7 +1,7 @@
-#include "JPEGimage.h"
+#include "image/format/JPEGimage.h"
 #include <iostream>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 namespace IMAGE {
 

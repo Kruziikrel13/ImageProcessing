@@ -27,6 +27,7 @@ add_compile_options(
 
 set(CMAKE_EXECUTABLE_ENABLE_EXPORTS TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+include_directories(include)
 
 set(PROG serial)
 set(SOURCES

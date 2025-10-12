@@ -1,7 +1,7 @@
-#include "PNGimage.h"
+#include "image/format/PNGimage.h"
 #include <iostream>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
 #ifdef CILK_PARALLEL
 #include <cilk/cilk.h>

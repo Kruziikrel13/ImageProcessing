@@ -1,7 +1,6 @@
-#ifndef _SERIAL_IMAGE_PROCESSING_H_
-#define _SERIAL_IMAGE_PROCESSING_H_
+#pragma once
 
-#include "../image/imageRaster.h"
+#include "image/imageRaster.h"
 
 namespace IMAGE {
 
@@ -36,5 +35,3 @@ namespace IMAGE {
     } // end of namespace PROCESS
 
 } // namespace IMAGE
-
-#endif
