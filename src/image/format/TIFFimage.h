@@ -20,13 +20,6 @@ extra information and functionality to support the tiff format.
 
     class TIFFimage : public Image {
       private:
-        // private copy-constructor and operator= to avoid passing by value
-        TIFFimage(const TIFFimage&) {}
-
-        TIFFimage& operator=(const TIFFimage&) {
-            return *this;
-        }
-
         // pointer to tiff file
         TIFF* imageFile_m;
 
@@ -38,6 +31,11 @@ extra information and functionality to support the tiff format.
         TIFFimage() noexcept;
 
         ~TIFFimage() noexcept;
+
+        // private copy-constructor and operator= to avoid passing by value
+        TIFFimage(const TIFFimage&) = delete;
+
+        TIFFimage& operator=(const TIFFimage&) = delete;
 
         void       open(const std::string&, const char);
 
