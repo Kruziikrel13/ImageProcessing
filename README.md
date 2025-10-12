@@ -15,27 +15,6 @@ In order to compile the serial implementation run the following command
 $ make -f serialMakefile
 ```
 
-
-OpenMP implementation
----------------------
-
-The second implementation uses the OpenMP libraries available for C/C++. OpenMP uses compiler directives in order to split the work on the available processors.
-
-In order to compile the openMP implementation run the following command
-```sh
-$ make -f openmpMakefile
-```
-
-CilkPlus implementation
------------------------
-
-The third implementation uses the CilkPlus compiler which adds simple language extensions to the C and C++languages to express task and data parallelism.
-
-In order to compile the CilkPlus implementation run the following command
-```sh
-$ make -f cilkplusMakefile
-```
-
 Dependencies
 ------------
 
