@@ -8,32 +8,34 @@
 
 namespace IMAGE {
 
-class JPEGimage : public Image {
-private:
-  JPEGimage(const JPEGimage &);
+    class JPEGimage : public Image {
+      private:
+        JPEGimage(const JPEGimage&);
 
-  JPEGimage &operator=(const JPEGimage &) { return *this; }
+        JPEGimage& operator=(const JPEGimage&) {
+            return *this;
+        }
 
-  FILE *imageFile_m;
+        FILE* imageFile_m;
 
 #ifdef DEBUG
-  static AutoCounter<JPEGimage> counter;
+        static AutoCounter<JPEGimage> counter;
 #endif
 
-public:
-  JPEGimage() throw();
+      public:
+        JPEGimage() throw();
 
-  ~JPEGimage() throw();
+        ~JPEGimage() throw();
 
-  void open(const std::string &, const char) throw(IMAGE::file_io_failed);
+        void open(const std::string&, const char) throw(IMAGE::file_io_failed);
 
-  void close();
+        void close();
 
-  void readImageRaster() throw(IMAGE::bad_alloc, IMAGE::empty_image);
+        void readImageRaster() throw(IMAGE::bad_alloc, IMAGE::empty_image);
 
-  void writeRasterToImage() throw(IMAGE::empty_raster);
+        void writeRasterToImage() throw(IMAGE::empty_raster);
 
-}; // and of class JPEGimage
+    }; // and of class JPEGimage
 
 } // end of namespace IMAGE
 

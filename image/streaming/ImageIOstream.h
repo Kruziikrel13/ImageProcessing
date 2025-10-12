@@ -13,74 +13,75 @@
 
 namespace IMAGE {
 
-typedef volatile bool Flag;
+    typedef volatile bool Flag;
 
-class ImageIOstream {
+    class ImageIOstream {
 
-  std::queue<std::pair<std::string, IMAGE::ImageRaster *>> stage1Queue,
-      stage2Queue;
+        std::queue<std::pair<std::string, IMAGE::ImageRaster*>> stage1Queue, stage2Queue;
 
-  std::queue<std::string> inputNames;
+        std::queue<std::string>                                 inputNames;
 
-  unsigned int readerCount;
+        unsigned int                                            readerCount;
 
-  unsigned int processorCount;
+        unsigned int                                            processorCount;
 
-  unsigned int writerCount;
+        unsigned int                                            writerCount;
 
-  // shared flags for the three workers to signal when they finish their work
-  Flag readerDone;
+        // shared flags for the three workers to signal when they finish their work
+        Flag readerDone;
 
-  Flag writerDone;
+        Flag writerDone;
 
-  Flag processorDone;
+        Flag processorDone;
 
-  // private copy-constructor and operator = to avoid passing by value
-  ImageIOstream(const ImageIOstream &) {}
+        // private copy-constructor and operator = to avoid passing by value
+        ImageIOstream(const ImageIOstream&) {}
 
-  ImageIOstream &operator=(const ImageIOstream &) { return *this; }
+        ImageIOstream& operator=(const ImageIOstream&) {
+            return *this;
+        }
 
-  // from which directory to read the images
-  std::string readPath;
+        // from which directory to read the images
+        std::string readPath;
 
-  // to which directory to write the images
-  std::string writePath;
+        // to which directory to write the images
+        std::string writePath;
 
-  // which operation to perform in the processing unitc
-  std::string operation;
+        // which operation to perform in the processing unitc
+        std::string operation;
 
-  // each stream has 3 worker threads.One reader one writer and one processor
-  void readStreamWorker();
+        // each stream has 3 worker threads.One reader one writer and one processor
+        void readStreamWorker();
 
-  void processStreamWorker();
+        void processStreamWorker();
 
-  void writeStreamWorker();
+        void writeStreamWorker();
 
-public:
-  ImageIOstream();
+      public:
+        ImageIOstream();
 
-  ~ImageIOstream();
+        ~ImageIOstream();
 
-  double time;
-  // sets the read and write path
-  ImageIOstream(std::string, std::string);
+        double time;
+        // sets the read and write path
+        ImageIOstream(std::string, std::string);
 
-  std::string getReadPath() const;
+        std::string getReadPath() const;
 
-  void setReadPath(std::string);
+        void        setReadPath(std::string);
 
-  std::string getWritePath() const;
+        std::string getWritePath() const;
 
-  void setWritePath(std::string);
+        void        setWritePath(std::string);
 
-  std::string getOperation() const;
+        std::string getOperation() const;
 
-  void setOperation(std::string);
+        void        setOperation(std::string);
 
-  int readDirectoryContents();
+        int         readDirectoryContents();
 
-  int startStreaming();
-};
+        int         startStreaming();
+    };
 
 } // end of namespace IMAGE
 
