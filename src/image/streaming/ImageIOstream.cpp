@@ -4,24 +4,14 @@
 namespace IMAGE {
 
     // constructor
-    ImageIOstream::ImageIOstream() : readerDone(false), writerDone(false), processorDone(false), time(0) {
-
-        readerCount    = 0;
-        processorCount = 0;
-        writerCount    = 0;
-    }
+    ImageIOstream::ImageIOstream() : readerCount(0), processorCount(0), writerCount(0), readerDone(false), writerDone(false), processorDone(false), time(0) {}
 
     // destructor
-    ImageIOstream::~ImageIOstream() {}
+    ImageIOstream::~ImageIOstream() = default;
 
-    ImageIOstream::ImageIOstream(std::string rp, std::string wp) {
-        time       = 0;
+    ImageIOstream::ImageIOstream(std::string rp, std::string wp) : time(0), readPath(rp), writePath(wp), readerCount(0), processorCount(0), writerCount(0) {
+
         readerDone = writerDone = processorDone = false;
-        readPath                                = rp;
-        writePath                               = wp;
-        readerCount                             = 0;
-        processorCount                          = 0;
-        writerCount                             = 0;
     }
 
     std::string ImageIOstream::getReadPath() const {
@@ -62,7 +52,7 @@ read contents of directory and place the names in vector*/
             std::string s = dirp->d_name;
             if (s.find(".jpg") != std::string::npos || s.find(".tiff") != std::string::npos || s.find(".jpeg") != std::string::npos || s.find(".PNG") != std::string::npos ||
                 s.find(".png") != std::string::npos) {
-                inputNames.push(std::string(s));
+                inputNames.emplace(s);
             }
         }
         return 1;
@@ -129,16 +119,16 @@ of that image to the list for process and then goes to open the next image*/
 
                 }
 
-                catch (IMAGE::file_io_failed& e) {
+                catch (IMAGE::FileIoFailed& e) {
                     std::cout << e.what() << "\n";
-                } catch (IMAGE::image_format_error& e) { std::cout << e.what() << "\n"; } catch (IMAGE::empty_image& e) {
+                } catch (IMAGE::ImageFormatError& e) { std::cout << e.what() << "\n"; } catch (IMAGE::EmptyImage& e) {
                     std::cout << e.what() << "\n";
-                } catch (IMAGE::empty_raster& e) { std::cout << e.what() << "\n"; }
+                } catch (IMAGE::EmptyRaster& e) { std::cout << e.what() << "\n"; }
 
                 tempImage->close();
                 delete tempImage;
 
-            } catch (IMAGE::not_supported_format& e) { std::cout << e.what() << std::endl; }
+            } catch (IMAGE::NotSupportedFormat& e) { std::cout << e.what() << std::endl; }
 
         } // end of while.The reader finished his work and updates his flag
 
@@ -159,10 +149,10 @@ of that image to the list for process and then goes to open the next image*/
         while (!readerDone || !processorDone) {
 
             processorDone = false;
-            if (!(stage1Queue.size() == 0)) {
+            if (!(stage1Queue.empty())) {
 #pragma omp critical(STAGE1)
                 {
-                    if (!(stage1Queue.size() == 0)) {
+                    if (!(stage1Queue.empty())) {
                         tempPair = stage1Queue.front();
                         stage1Queue.pop();
                         processorCount++;
@@ -201,11 +191,11 @@ of that image to the list for process and then goes to open the next image*/
         while (!readerDone || !processorDone || !writerDone) {
 
             writerDone = false;
-            if (!(stage2Queue.size() == 0)) {
+            if (!(stage2Queue.empty())) {
 
 #pragma omp critical(STAGE2)
                 {
-                    if (!(stage2Queue.size() == 0)) {
+                    if (!(stage2Queue.empty())) {
                         tempPair = stage2Queue.front();
                         stage2Queue.pop();
                         // writerCount++;
@@ -220,16 +210,16 @@ of that image to the list for process and then goes to open the next image*/
                         tempImage->writeRasterToImage();
                     }
 
-                    catch (IMAGE::file_io_failed& e) {
+                    catch (IMAGE::FileIoFailed& e) {
                         std::cout << e.what() << "\n";
-                    } catch (IMAGE::image_format_error& e) { std::cout << e.what() << "\n"; } catch (IMAGE::empty_image& e) {
+                    } catch (IMAGE::ImageFormatError& e) { std::cout << e.what() << "\n"; } catch (IMAGE::EmptyImage& e) {
                         std::cout << e.what() << "\n";
-                    } catch (IMAGE::empty_raster& e) { std::cout << e.what() << "\n"; }
+                    } catch (IMAGE::EmptyRaster& e) { std::cout << e.what() << "\n"; }
 
                     tempImage->close();
                     delete tempImage;
                     delete tempPair.second;
-                } catch (IMAGE::not_supported_format& e) { std::cout << e.what() << std::endl; }
+                } catch (IMAGE::NotSupportedFormat& e) { std::cout << e.what() << std::endl; }
 
             } else
                 writerDone = true;

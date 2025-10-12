@@ -18,7 +18,7 @@ namespace IMAGE {
     AutoCounter<PNGimage> PNGimage::counter;
 #endif
 
-    PNGimage::PNGimage() noexcept : imageFile_m(NULL) {
+    PNGimage::PNGimage() noexcept : imageFile_m(nullptr) {
 #ifdef DEBUG
         counter.increase();
 #endif
@@ -41,7 +41,7 @@ namespace IMAGE {
             imageFile_m = fopen(name.c_str(), "wb");
 
         if (!imageFile_m)
-            throw IMAGE::file_io_failed("Could not open file " + name); // failed to
+            throw IMAGE::FileIoFailed("Could not open file " + name); // failed to
                                                                         // open
 
         // read mode
@@ -51,23 +51,23 @@ namespace IMAGE {
 
             size_t bytesRead = fread(header, 1, 8, imageFile_m);
             if (bytesRead != 8) {
-                throw IMAGE::file_io_failed("Failed to read PNG header from file " + name_m);
+                throw IMAGE::FileIoFailed("Failed to read PNG header from file " + name_m);
             }
             if (png_sig_cmp((unsigned char*)header, 0, 8))
-                throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+                throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
             /* initialize stuff */
-            png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+            png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
             if (!png_ptr)
-                throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+                throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
             info_ptr = png_create_info_struct(png_ptr);
             if (!info_ptr)
-                throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+                throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
             if (setjmp(png_jmpbuf(png_ptr)))
-                throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+                throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
             png_init_io(png_ptr, imageFile_m);
             png_set_sig_bytes(png_ptr, 8);
@@ -92,17 +92,17 @@ namespace IMAGE {
 
         // write mode
         else if (mode == 'w') {
-            png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+            png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
             if (!png_ptr)
-                throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+                throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
             info_ptr = png_create_info_struct(png_ptr);
             if (!info_ptr)
-                throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+                throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
             if (setjmp(png_jmpbuf(png_ptr)))
-                throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+                throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
         }
     }
 
@@ -114,11 +114,11 @@ namespace IMAGE {
     void PNGimage::readImageRaster() {
 
         if (!imageFile_m)
-            throw IMAGE::empty_image("Tried to read from unopened image " + name_m);
+            throw IMAGE::EmptyImage("Tried to read from unopened image " + name_m);
 
         try {
             this->raster.createRaster();
-        } catch (IMAGE::bad_alloc& e) { throw IMAGE::bad_alloc("Not enough memory for image   " + name_m); }
+        } catch (IMAGE::BadAlloc& e) { throw IMAGE::BadAlloc("Not enough memory for image   " + name_m); }
 
         unsigned int   width   = raster.getWidth();
         unsigned int   height  = raster.getHeight();
@@ -126,7 +126,7 @@ namespace IMAGE {
         unsigned char* ptr     = raster.getRasterPointer();
 
         if (setjmp(png_jmpbuf(png_ptr)))
-            throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+            throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
         png_bytep* row_pointers;
 
         row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * height);
@@ -168,12 +168,12 @@ namespace IMAGE {
     void PNGimage::writeRasterToImage() {
 
         if (!raster.hasRaster())
-            throw IMAGE::empty_raster("Raster of image " + name_m + " is empty");
+            throw IMAGE::EmptyRaster("Raster of image " + name_m + " is empty");
 
         png_init_io(png_ptr, imageFile_m);
 
         if (setjmp(png_jmpbuf(png_ptr)))
-            throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+            throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
         unsigned int   width   = raster.getWidth();
         unsigned int   height  = raster.getHeight();
@@ -193,7 +193,7 @@ namespace IMAGE {
 
         /* write bytes */
         if (setjmp(png_jmpbuf(png_ptr)))
-            throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
+            throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
 
         png_bytep* row_pointers;
 
@@ -224,8 +224,8 @@ namespace IMAGE {
 
         /* end write */
         if (setjmp(png_jmpbuf(png_ptr)))
-            throw IMAGE::image_format_error("PNG internal error in image   " + name_m);
-        png_write_end(png_ptr, NULL);
+            throw IMAGE::ImageFormatError("PNG internal error in image   " + name_m);
+        png_write_end(png_ptr, nullptr);
 
         /* cleanup heap allocation */
         for (unsigned int y = 0; y < height; y++)

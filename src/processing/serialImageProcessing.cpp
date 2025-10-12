@@ -1,4 +1,5 @@
 #include "processing/imageProcessing.h"
+#include <algorithm>
 #include <cstring>
 
 // #include <cilk/cilk.h>
@@ -20,7 +21,7 @@ namespace IMAGE {
         /////////////////////////////////////////////////              Static helper
         ///functions                ////////////////////////////////////////////////
 
-        static inline unsigned int getComponents(unsigned char* add) {
+        static inline unsigned int getComponents(const unsigned char* add) {
 
             return (unsigned int)((((unsigned int)add[0]) | (unsigned int)(add[1] << 8) | (unsigned int)(add[2] << 16)) & 0x00ffffff);
         }
@@ -54,7 +55,7 @@ namespace IMAGE {
                      firstColumn += samples_per_pixel, lastColumn -= samples_per_pixel)
                     // assign each component of every pixel
                     for (int i = 0; i < samples_per_pixel; i++)
-                        to[width * samples_per_pixel * lastRow + lastColumn + i] = from[width * samples_per_pixel * firstRow + firstColumn + i];
+                        to[(width * samples_per_pixel * lastRow) + lastColumn + i] = from[(width * samples_per_pixel * firstRow) + firstColumn + i];
 
             raster.attachRaster(tempRaster);
         }
@@ -72,10 +73,10 @@ namespace IMAGE {
             unsigned char* from = raster.getRasterPointer();
 
             for (unsigned int row = 0, tempColumn = height; row < height && tempColumn > 0; row++, tempColumn--)
-                for (unsigned int column = 0, tempRow = tempColumn * samples_per_pixel - samples_per_pixel;
+                for (unsigned int column = 0, tempRow = (tempColumn * samples_per_pixel) - samples_per_pixel;
                      column < width * samples_per_pixel && tempColumn < width * tempColumn * samples_per_pixel; column += samples_per_pixel, tempRow += height * samples_per_pixel)
                     for (unsigned int i = 0; i < samples_per_pixel; i++)
-                        to[tempRow + i] = from[width * samples_per_pixel * row + column + i];
+                        to[tempRow + i] = from[(width * samples_per_pixel * row) + column + i];
 
             raster.attachRaster(tempRaster);
         }
@@ -93,16 +94,16 @@ namespace IMAGE {
             unsigned char* from = raster.getRasterPointer();
 
             for (unsigned int tempRow = 0, column = width; tempRow < width && column > 0; tempRow++, column--)
-                for (unsigned int tempColumn = 0, row = column * samples_per_pixel - samples_per_pixel;
-                     tempColumn < height * samples_per_pixel && row < height * width * samples_per_pixel - (tempRow * samples_per_pixel);
+                for (unsigned int tempColumn = 0, row = (column * samples_per_pixel) - samples_per_pixel;
+                     tempColumn < height * samples_per_pixel && row < (height * width * samples_per_pixel) - (tempRow * samples_per_pixel);
                      tempColumn += samples_per_pixel, row += width * samples_per_pixel)
                     for (unsigned int i = 0; i < samples_per_pixel; i++)
-                        to[height * tempRow * samples_per_pixel + tempColumn + i] = from[row + i];
+                        to[(height * tempRow * samples_per_pixel) + tempColumn + i] = from[row + i];
 
             raster.attachRaster(tempRaster);
         }
 
-        static void ScaleLine(unsigned char* target, unsigned char* source, unsigned int srcWidth, unsigned int trgWidth, unsigned int samples) {
+        static void scaleLine(unsigned char* target, const unsigned char* source, unsigned int srcWidth, unsigned int trgWidth, unsigned int samples) {
 
             unsigned int intPart  = srcWidth / trgWidth;
             unsigned int fraqPart = srcWidth % trgWidth;
@@ -192,10 +193,10 @@ form its initial value assuming that the components are RGBor RGBA*/
                             for (signed int k = -c; k < end_c; k++) {
 
                                 counter++;
-                                sum += raster.raster_m[(row + p) * w * s + (col + k) * s + i];
+                                sum += raster.raster_m[((row + p) * w * s) + ((col + k) * s) + i];
                             }
                         sum /= counter;
-                        temp.raster_m[row * w * s + col * s + i] = (unsigned char)sum;
+                        temp.raster_m[(row * w * s) + (col * s) + i] = (unsigned char)sum;
                         sum                                      = 0;
                         counter                                  = 0;
                     }
@@ -268,8 +269,7 @@ component that higher than the highLimit.*/
         void adjustContrast(const IMAGE::ImageRaster& raster, const unsigned short percent) {
 
             unsigned short contrast = percent;
-            if (contrast > 100)
-                contrast = 100;
+            contrast                = std::min<unsigned short>(contrast, 100);
 
             contrast = (contrast * 128) / 100;
 
@@ -316,13 +316,13 @@ component that higher than the highLimit.*/
             for (unsigned int dest_y = 0; dest_y < raster.height_m; dest_y++) {
                 // which row in destination image to write
                 unsigned int   source_y = (unsigned int)(dest_y * y_ratio);
-                unsigned char* src      = source + source_y * step;
+                unsigned char* src      = source + (source_y * step);
 
                 for (unsigned int dest_x = 0; dest_x < raster.width_m; dest_x++) {
 
                     unsigned int offset = (unsigned int)(dest_x * x_ratio);
                     for (unsigned int i = 0; i < raster.samples_per_pixel_m; i++)
-                        tempRaster.raster_m[dest_y * step + dest_x * raster.samples_per_pixel_m + i] = src[offset * raster.samples_per_pixel_m + i];
+                        tempRaster.raster_m[(dest_y * step) + (dest_x * raster.samples_per_pixel_m) + i] = src[(offset * raster.samples_per_pixel_m) + i];
                 }
             }
 
@@ -342,16 +342,16 @@ component that higher than the highLimit.*/
             unsigned int   fraqPart = raster.height_m % tempRaster.height_m;
             unsigned int   E        = 0;
 
-            unsigned char* prevSource  = NULL;
+            unsigned char* prevSource  = nullptr;
             unsigned char* source      = raster.raster_m;
             unsigned char* destination = tempRaster.raster_m;
 
             for (unsigned int i = 0; i < tempRaster.height_m; i++) {
 
                 if (source == prevSource) {
-                    memcpy(destination, destination - tempRaster.width_m * tempRaster.samples_per_pixel_m, tempRaster.width_m * tempRaster.samples_per_pixel_m);
+                    memcpy(destination, destination - (tempRaster.width_m * tempRaster.samples_per_pixel_m), tempRaster.width_m * tempRaster.samples_per_pixel_m);
                 } else {
-                    ScaleLine(destination, source, raster.width_m, tempRaster.width_m, raster.samples_per_pixel_m);
+                    scaleLine(destination, source, raster.width_m, tempRaster.width_m, raster.samples_per_pixel_m);
                     prevSource = source;
                 }
 
@@ -443,15 +443,15 @@ Arguments ImageRaster*/
             for (unsigned int i = 0; i < raster.total_pixels_m * raster.samples_per_pixel_m; i += raster.samples_per_pixel_m) {
 
                 // calculating factor for red first
-                factor = raster.raster_m[i] * 0.393 + raster.raster_m[i + 1] * 0.769 + raster.raster_m[i + 2] * 0.189;
+                factor = (raster.raster_m[i] * 0.393) + (raster.raster_m[i + 1] * 0.769) + (raster.raster_m[i + 2] * 0.189);
                 (factor > 255) ? raster.raster_m[i] = 255 : raster.raster_m[i] = factor;
 
                 // green
-                factor = raster.raster_m[i] * 0.349 + raster.raster_m[i + 1] * 0.686 + raster.raster_m[i + 2] * 0.168;
+                factor = (raster.raster_m[i] * 0.349) + (raster.raster_m[i + 1] * 0.686) + (raster.raster_m[i + 2] * 0.168);
                 (factor > 255) ? raster.raster_m[i + 1] = 255 : raster.raster_m[i + 1] = factor;
 
                 // blue
-                factor = raster.raster_m[i] * 0.272 + raster.raster_m[i + 1] * 0.534 + raster.raster_m[i + 2] * 0.131;
+                factor = (raster.raster_m[i] * 0.272) + (raster.raster_m[i + 1] * 0.534) + (raster.raster_m[i + 2] * 0.131);
                 (factor > 255) ? raster.raster_m[i + 2] = 255 : raster.raster_m[i + 2] = factor;
             }
         }

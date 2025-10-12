@@ -1,6 +1,6 @@
 #include "image/imageRaster.h"
 #include <iostream>
-#include <string.h>
+#include <cstring>
 
 #ifdef CILK_PARALLEL
 #include <cilk/cilk.h>
@@ -43,13 +43,13 @@ namespace IMAGE {
         // destroy an active raster if exists
         this->destroyRaster();
 
-        // if new failed to find enough space throw an IMAGE::bad_alloc
+        // if new failed to find enough space throw an IMAGE::BadAlloc
         try {
             raster_m     = new unsigned char[total_pixels_m * samples_per_pixel_m];
             has_raster_m = true;
         } catch (std::bad_alloc& e) {
             has_raster_m = false;
-            throw IMAGE::bad_alloc();
+            throw IMAGE::BadAlloc();
         }
     }
 
@@ -90,7 +90,7 @@ destroyed first and then the new area is created .*/
     void ImageRaster::createRaster(const ImageRaster& copy) {
         // if the copy raster is empty
         if (!copy.hasRaster())
-            throw IMAGE::empty_raster();
+            throw IMAGE::EmptyRaster();
 
         // if an exception is thrown from allocateRaster should be handled by a higher
         // try block
@@ -105,7 +105,7 @@ destroyed first and then the new area is created .*/
     void ImageRaster::createRaster(const unsigned int w, const unsigned int h, const unsigned int s) {
         // checking for valid arguments
         if (s < 3 || s > 4)
-            throw IMAGE::invalid_argument("Wrong arguments for creation of raster");
+            throw IMAGE::InvalidArgument("Wrong arguments for creation of raster");
 
         width_m             = w;
         height_m            = h;
@@ -134,7 +134,7 @@ destroyed first and then the new area is created .*/
         if (has_raster_m)
             return raster_m;
         else
-            return NULL;
+            return nullptr;
     }
 
     int ImageRaster::attachRaster(ImageRaster& from) noexcept {
@@ -153,7 +153,7 @@ destroyed first and then the new area is created .*/
         has_raster_m = true;
 
         // reset raster from so that it doesnt point to the same area with this raster
-        from.raster_m            = NULL;
+        from.raster_m            = nullptr;
         from.has_raster_m        = false;
         from.width_m             = 0;
         from.height_m            = 0;

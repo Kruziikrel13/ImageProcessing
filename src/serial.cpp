@@ -61,8 +61,8 @@ int main(int argc, char** argv) {
             for (std::vector<std::string>::iterator it = imageName.begin(); it < imageName.end(); it++) {
 
                 std::cout << (*it) << "\n";
-                IMAGE::Image* oldImage = NULL;
-                IMAGE::Image* newImage = NULL;
+                IMAGE::Image* oldImage = nullptr;
+                IMAGE::Image* newImage = nullptr;
                 std::string   oldName  = argv[1] + (*it);
                 std::string   newName  = argv[2] + (*it);
                 try {
@@ -108,16 +108,16 @@ int main(int argc, char** argv) {
                         newImage->writeRasterToImage();
                         succeded++;
 
-                    } catch (IMAGE::file_io_failed& e) {
+                    } catch (IMAGE::FileIoFailed& e) {
                         std::cout << e.what() << "\n";
                         failed++;
-                    } catch (IMAGE::image_format_error& e) {
+                    } catch (IMAGE::ImageFormatError& e) {
                         std::cout << e.what() << "\n";
                         failed++;
-                    } catch (IMAGE::empty_image& e) {
+                    } catch (IMAGE::EmptyImage& e) {
                         std::cout << e.what() << "\n";
                         failed++;
-                    } catch (IMAGE::empty_raster& e) {
+                    } catch (IMAGE::EmptyRaster& e) {
                         std::cout << e.what() << "\n";
                         failed++;
                     }
@@ -127,14 +127,14 @@ int main(int argc, char** argv) {
                     delete oldImage;
                     delete newImage;
 
-                } catch (IMAGE::not_supported_format& e) {
+                } catch (IMAGE::NotSupportedFormat& e) {
                     std::cout << e.what() << "\n";
                     failed++;
                 }
 
             } // end of for
 
-        } catch (IMAGE::bad_alloc& e) {
+        } catch (IMAGE::BadAlloc& e) {
             std::cout << e.what() << std::endl;
             std::cout << "Exiting program...\n";
             exit(1);

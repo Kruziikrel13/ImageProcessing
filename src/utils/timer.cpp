@@ -2,14 +2,14 @@
 
 void Timer::start() {
 
-    gettimeofday(&rS, NULL);
+    gettimeofday(&rS, nullptr);
     // rS = clock();
     times(&uS);
 }
 
 void Timer::stop() {
 
-    gettimeofday(&rE, NULL);
+    gettimeofday(&rE, nullptr);
     // rE = clock();
     times(&uE);
 

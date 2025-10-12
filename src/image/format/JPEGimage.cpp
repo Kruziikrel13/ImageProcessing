@@ -11,7 +11,7 @@ namespace IMAGE {
 
     // public
 
-    JPEGimage::JPEGimage() noexcept : imageFile_m(NULL) {
+    JPEGimage::JPEGimage() noexcept : imageFile_m(nullptr) {
 #ifdef DEBUG
         counter.increase();
 #endif
@@ -30,7 +30,7 @@ namespace IMAGE {
             imageFile_m = fopen(name_m.c_str(), "rb");
             // failed to open
             if (!imageFile_m)
-                throw IMAGE::file_io_failed("Could not open file " + n + "in mode " + mode);
+                throw IMAGE::FileIoFailed("Could not open file " + n + "in mode " + mode);
 
             struct jpeg_decompress_struct decompressor;
             struct jpeg_error_mgr         jerr;
@@ -52,7 +52,7 @@ namespace IMAGE {
         if (mode == 'w')
             imageFile_m = fopen(name_m.c_str(), "wb");
         if (!imageFile_m)
-            throw IMAGE::file_io_failed("Could not open file " + n + " in mode " + mode);
+            throw IMAGE::FileIoFailed("Could not open file " + n + " in mode " + mode);
     }
 
     void JPEGimage::close() {
@@ -64,11 +64,11 @@ namespace IMAGE {
     void JPEGimage::readImageRaster() {
 
         if (!imageFile_m)
-            throw IMAGE::empty_image("Tried to read from unopened image " + name_m);
+            throw IMAGE::EmptyImage("Tried to read from unopened image " + name_m);
         // createRaster can throw for a bad_alloc
         try {
             raster.createRaster();
-        } catch (IMAGE::bad_alloc& e) { throw IMAGE::bad_alloc("Not enough memory for image   " + name_m); }
+        } catch (IMAGE::BadAlloc& e) { throw IMAGE::BadAlloc("Not enough memory for image   " + name_m); }
 
         imageFile_m = freopen(name_m.c_str(), "rb", imageFile_m);
 
@@ -109,7 +109,7 @@ namespace IMAGE {
     void JPEGimage::writeRasterToImage() {
 
         if (!raster.hasRaster())
-            throw IMAGE::empty_raster("Raster of image " + name_m + " is empty");
+            throw IMAGE::EmptyRaster("Raster of image " + name_m + " is empty");
 
         struct jpeg_compress_struct compressor;
         struct jpeg_error_mgr       jerr;

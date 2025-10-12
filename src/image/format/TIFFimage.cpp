@@ -10,7 +10,7 @@ namespace IMAGE {
 
     // public
 
-    TIFFimage::TIFFimage() noexcept : imageFile_m(NULL) {
+    TIFFimage::TIFFimage() noexcept : imageFile_m(nullptr) {
 #ifdef DEBUG
         counter.increase();
 #endif
@@ -27,7 +27,7 @@ namespace IMAGE {
         imageFile_m = TIFFOpen(n.c_str(), &mode);
         // failed to open
         if (!imageFile_m)
-            throw IMAGE::file_io_failed("Could not open file " + n + " in mode " + mode);
+            throw IMAGE::FileIoFailed("Could not open file " + n + " in mode " + mode);
 
         // image is open
         unsigned int tempW, tempH, tempS;
@@ -51,24 +51,24 @@ namespace IMAGE {
 
         // checking for open image
         if (!imageFile_m)
-            throw IMAGE::empty_image("Tried to read from unopened image " + name_m);
+            throw IMAGE::EmptyImage("Tried to read from unopened image " + name_m);
 
         // create raster failed to allocate enough space
         try {
             this->raster.createRaster();
-        } catch (IMAGE::bad_alloc& e) { throw IMAGE::bad_alloc("Not enough space for image   " + name_m); }
+        } catch (IMAGE::BadAlloc& e) { throw IMAGE::BadAlloc("Not enough space for image   " + name_m); }
 
         unsigned char* ptr = this->raster.getRasterPointer();
 
         if (!TIFFReadRGBAImage(imageFile_m, raster.getWidth(), raster.getHeight(), (unsigned int*)ptr, 0))
-            throw IMAGE::image_format_error("TIFF image internal error   " + name_m);
+            throw IMAGE::ImageFormatError("TIFF image internal error   " + name_m);
     }
 
     void TIFFimage::writeRasterToImage() {
 
         // if there is no raster return
         if (!raster.hasRaster())
-            throw IMAGE::empty_raster("Raster of image " + name_m + " is empty");
+            throw IMAGE::EmptyRaster("Raster of image " + name_m + " is empty");
 
         // setting up specific TIFF info
         unsigned int   temp_width   = raster.getWidth();
@@ -90,7 +90,7 @@ namespace IMAGE {
         for (unsigned int row = 0; row < temp_height; row++) {
 
             if (TIFFWriteScanline(imageFile_m, &raster_m[(temp_height - row - 1) * temp_width * temp_samples], row, 0) < 0) {
-                throw IMAGE::image_format_error("TIFF image internal error   " + name_m);
+                throw IMAGE::ImageFormatError("TIFF image internal error   " + name_m);
             }
         }
     }

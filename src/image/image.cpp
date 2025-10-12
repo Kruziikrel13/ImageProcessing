@@ -43,9 +43,9 @@ namespace IMAGE {
                 return new IMAGE::PNGimage();
 
             else // not supported format . throw exception
-                throw IMAGE::not_supported_format("Format of  " + s + "   is not supported");
-        } catch (std::bad_alloc& e) { throw IMAGE::bad_alloc("Not enough memory to create image    " + s); }
-        return NULL;
+                throw IMAGE::NotSupportedFormat("Format of  " + s + "   is not supported");
+        } catch (std::bad_alloc& e) { throw IMAGE::BadAlloc("Not enough memory to create image    " + s); }
+        return nullptr;
     }
 
 } // namespace IMAGE

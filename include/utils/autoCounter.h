@@ -6,7 +6,7 @@
 template <class T>
 class AutoCounter {
 
-    int object_counter;
+    int object_counter{0};
 
     AutoCounter(const AutoCounter& s) {}
 
@@ -15,7 +15,7 @@ class AutoCounter {
     }
 
   public:
-    AutoCounter() : object_counter(0) {}
+    AutoCounter() {}
 
     void increase() {
         object_counter++;

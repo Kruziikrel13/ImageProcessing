@@ -8,39 +8,39 @@ namespace IMAGE {
 
     /*classes to use as exception objects */
 
-    class bad_alloc : public std::runtime_error {
+    class BadAlloc : public std::runtime_error {
       public:
-        explicit bad_alloc(const std::string& arg = "") : std::runtime_error(arg) {}
+        explicit BadAlloc(const std::string& arg = "") : std::runtime_error(arg) {}
     };
 
-    class image_format_error : public std::logic_error {
+    class ImageFormatError : public std::logic_error {
       public:
-        explicit image_format_error(const std::string& arg = "") : std::logic_error(arg) {}
+        explicit ImageFormatError(const std::string& arg = "") : std::logic_error(arg) {}
     };
 
-    class not_supported_format : public std::runtime_error {
+    class NotSupportedFormat : public std::runtime_error {
       public:
-        explicit not_supported_format(const std::string& arg = "") : std::runtime_error(arg) {}
+        explicit NotSupportedFormat(const std::string& arg = "") : std::runtime_error(arg) {}
     };
 
-    class invalid_argument : public std::invalid_argument {
+    class InvalidArgument : public std::invalid_argument {
       public:
-        explicit invalid_argument(const std::string& arg = "") : std::invalid_argument(arg) {}
+        explicit InvalidArgument(const std::string& arg = "") : std::invalid_argument(arg) {}
     };
 
-    class file_io_failed : public std::runtime_error {
+    class FileIoFailed : public std::runtime_error {
       public:
-        explicit file_io_failed(const std::string& arg = "") : std::runtime_error(arg) {}
+        explicit FileIoFailed(const std::string& arg = "") : std::runtime_error(arg) {}
     };
 
-    class empty_raster : public std::logic_error {
+    class EmptyRaster : public std::logic_error {
       public:
-        explicit empty_raster(const std::string& arg = "") : std::logic_error(arg) {}
+        explicit EmptyRaster(const std::string& arg = "") : std::logic_error(arg) {}
     };
 
-    class empty_image : public std::logic_error {
+    class EmptyImage : public std::logic_error {
       public:
-        explicit empty_image(const std::string& arg = "") : std::logic_error(arg) {}
+        explicit EmptyImage(const std::string& arg = "") : std::logic_error(arg) {}
     };
 
 } // end of namespace IMAGE
