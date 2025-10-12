@@ -5,14 +5,13 @@
 // distributed with the code package available at www.MindView.net.
 #ifndef MEMCHECK_H
 #define MEMCHECK_H
-#include <cstddef>  // For size_t
+#include <cstddef> // For size_t
 
 #ifdef DEBUG
 
-
 // Usurp the new operator (both scalar and array versions)
-void* operator new(std::size_t, const char*, long);
-void* operator new[](std::size_t, const char*, long);
+void *operator new(std::size_t, const char *, long);
+void *operator new[](std::size_t, const char *, long);
 #define new new (__FILE__, __LINE__)
 
 extern bool traceFlag;
@@ -24,6 +23,5 @@ extern bool activeFlag;
 #define MEM_OFF() activeFlag = false
 
 #endif
-
 
 #endif // MEMCHECK_H ///:~

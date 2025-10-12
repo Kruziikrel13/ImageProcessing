@@ -1,110 +1,87 @@
 #ifndef IMAGE_IO_STREAM
 #define IMAGE_IO_STREAM
 
-
-#include <iostream>
-#include <queue>
-#include <omp.h>
-#include "../image.h"
 #include "../../processing/imageProcessing.h"
-#include <dirent.h>
-#include <vector>
+#include "../image.h"
 #include "../imageRaster.h"
+#include <dirent.h>
+#include <iostream>
+#include <omp.h>
+#include <queue>
 #include <utility>
-
-
+#include <vector>
 
 namespace IMAGE {
 
-
-
-
 typedef volatile bool Flag;
-
-
 
 class ImageIOstream {
 
-	std::queue<std::pair<std::string , IMAGE::ImageRaster*> > stage1Queue , stage2Queue;
+  std::queue<std::pair<std::string, IMAGE::ImageRaster *>> stage1Queue,
+      stage2Queue;
 
-	std::queue<std::string> inputNames;
+  std::queue<std::string> inputNames;
 
-	unsigned int readerCount;
-	
-	unsigned int processorCount;
-		
-	unsigned int writerCount;
+  unsigned int readerCount;
 
-	//shared flags for the three workers to signal when they finish their work
-	Flag readerDone;
-	 
-	Flag writerDone;
-	
-	Flag processorDone;
+  unsigned int processorCount;
 
-	//private copy-constructor and operator = to avoid passing by value
-	ImageIOstream( const ImageIOstream& ) {}
+  unsigned int writerCount;
 
-	ImageIOstream& operator =( const ImageIOstream& ) { return *this ;}
+  // shared flags for the three workers to signal when they finish their work
+  Flag readerDone;
 
-	//from which directory to read the images
-	std::string readPath;
-	
-	//to which directory to write the images
-	std::string writePath;
+  Flag writerDone;
 
-	//which operation to perform in the processing unitc
-	std::string operation;
+  Flag processorDone;
 
-	//each stream has 3 worker threads.One reader one writer and one processor
-	void readStreamWorker();
+  // private copy-constructor and operator = to avoid passing by value
+  ImageIOstream(const ImageIOstream &) {}
 
-	void processStreamWorker();
+  ImageIOstream &operator=(const ImageIOstream &) { return *this; }
 
-	void writeStreamWorker();
-	
-		
+  // from which directory to read the images
+  std::string readPath;
 
+  // to which directory to write the images
+  std::string writePath;
+
+  // which operation to perform in the processing unitc
+  std::string operation;
+
+  // each stream has 3 worker threads.One reader one writer and one processor
+  void readStreamWorker();
+
+  void processStreamWorker();
+
+  void writeStreamWorker();
 
 public:
+  ImageIOstream();
 
-	ImageIOstream() ;
+  ~ImageIOstream();
 
-	~ImageIOstream() ;
-	
- 	double time;
-	//sets the read and write path
-	ImageIOstream( std::string , std::string );
+  double time;
+  // sets the read and write path
+  ImageIOstream(std::string, std::string);
 
-	std::string getReadPath() const ;
+  std::string getReadPath() const;
 
-	void setReadPath( std::string ) ;
+  void setReadPath(std::string);
 
-	std::string getWritePath( ) const ;
+  std::string getWritePath() const;
 
-	void setWritePath( std::string ) ;
+  void setWritePath(std::string);
 
-	std::string getOperation() const ;
+  std::string getOperation() const;
 
-	void setOperation( std::string ) ;
+  void setOperation(std::string);
 
-	int readDirectoryContents();
+  int readDirectoryContents();
 
-	int startStreaming();
-
+  int startStreaming();
 };
 
-
-}//end of namespace IMAGE
-
+} // end of namespace IMAGE
 
 #endif
-
-
-
-
-	
-
-
-
-

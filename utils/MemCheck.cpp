@@ -3,15 +3,14 @@
 // (c) 1995-2004 MindView, Inc. All Rights Reserved.
 // See source code use permissions stated in the file 'License.txt',
 // distributed with the code package available at www.MindView.net.
-#include <cstdio>
-#include <cstdlib>
 #include <cassert>
 #include <cstddef>
+#include <cstdio>
+#include <cstdlib>
 
 #ifdef DEBUG
 
 using namespace std;
-
 
 #undef new
 
@@ -23,8 +22,8 @@ namespace {
 
 // Memory map entry type
 struct Info {
-  void* ptr;
-  const char* file;
+  void *ptr;
+  const char *file;
   long line;
 };
 
@@ -34,32 +33,31 @@ Info memMap[MAXPTRS];
 size_t nptrs = 0;
 
 // Searches the map for an address
-int findPtr(void* p) {
-  for(size_t i = 0; i < nptrs; ++i)
-    if(memMap[i].ptr == p)
+int findPtr(void *p) {
+  for (size_t i = 0; i < nptrs; ++i)
+    if (memMap[i].ptr == p)
       return i;
   return -1;
 }
 
-void delPtr(void* p) {
+void delPtr(void *p) {
   int pos = findPtr(p);
   assert(pos >= 0);
   // Remove pointer from map
-  for(size_t i = pos; i < nptrs-1; ++i)
-    memMap[i] = memMap[i+1];
+  for (size_t i = pos; i < nptrs - 1; ++i)
+    memMap[i] = memMap[i + 1];
   --nptrs;
 }
 
 // Dummy type for static destructor
 struct Sentinel {
   ~Sentinel() {
-    if(nptrs > 0) {
+    if (nptrs > 0) {
       printf("Leaked memory at:\n");
-      for(size_t i = 0; i < nptrs; ++i)
-        printf("\t%p (file: %s, line %ld)\n",
-          memMap[i].ptr, memMap[i].file, memMap[i].line);
-    }
-    else
+      for (size_t i = 0; i < nptrs; ++i)
+        printf("\t%p (file: %s, line %ld)\n", memMap[i].ptr, memMap[i].file,
+               memMap[i].line);
+    } else
       printf("No user memory leaks!\n");
   }
 };
@@ -70,11 +68,10 @@ Sentinel s;
 } // End anonymous namespace
 
 // Overload scalar new
-void*
-operator new(size_t siz, const char* file, long line) {
-  void* p = malloc(siz);
-  if(activeFlag) {
-    if(nptrs == MAXPTRS) {
+void *operator new(size_t siz, const char *file, long line) {
+  void *p = malloc(siz);
+  if (activeFlag) {
+    if (nptrs == MAXPTRS) {
       printf("memory map too small (increase MAXPTRS)\n");
       exit(1);
     }
@@ -83,7 +80,7 @@ operator new(size_t siz, const char* file, long line) {
     memMap[nptrs].line = line;
     ++nptrs;
   }
-  if(traceFlag) {
+  if (traceFlag) {
     printf("Allocated %lu bytes at address %p ", siz, p);
     printf("(file: %s, line: %ld)\n", file, line);
   }
@@ -91,28 +88,23 @@ operator new(size_t siz, const char* file, long line) {
 }
 
 // Overload array new
-void*
-operator new[](size_t siz, const char* file, long line) {
+void *operator new[](size_t siz, const char *file, long line) {
   return operator new(siz, file, line);
 }
 
 // Override scalar delete
-void operator delete(void* p) {
-  if(findPtr(p) >= 0) {
+void operator delete(void *p) {
+  if (findPtr(p) >= 0) {
     free(p);
     assert(nptrs > 0);
     delPtr(p);
-    if(traceFlag)
+    if (traceFlag)
       printf("Deleted memory at address %p\n", p);
-  }
-  else if(!p && activeFlag)
+  } else if (!p && activeFlag)
     printf("Attempt to delete unknown pointer: %p\n", p);
 }
 
 // Override array delete
-void operator delete[](void* p) {
-  operator delete(p);
-} ///:~
+void operator delete[](void *p) { operator delete(p); } ///:~
 
 #endif
-

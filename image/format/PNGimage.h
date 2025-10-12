@@ -6,57 +6,46 @@
 
 namespace IMAGE {
 
-
-
-
 class PNGimage : public Image {
 private:
-	//png specific data
-	png_byte color_type;
+  // png specific data
+  png_byte color_type;
 
-	png_byte bit_depth;
-		
-	png_structp png_ptr;
+  png_byte bit_depth;
 
-	png_infop info_ptr ; 
+  png_structp png_ptr;
 
-	int num_of_passes;
+  png_infop info_ptr;
 
-	FILE* imageFile_m;
+  int num_of_passes;
 
-	//private copy constructor and operator =
-	PNGimage( const PNGimage& );
-	
-	PNGimage& operator =( const PNGimage& ) { return *this; }
+  FILE *imageFile_m;
+
+  // private copy constructor and operator =
+  PNGimage(const PNGimage &);
+
+  PNGimage &operator=(const PNGimage &) { return *this; }
 #ifdef DEBUG
-	static AutoCounter<PNGimage> counter;
-#endif	
+  static AutoCounter<PNGimage> counter;
+#endif
 public:
-	
-	PNGimage() throw();
-	
-	~PNGimage() throw();
+  PNGimage() throw();
 
-	void open( const std::string& , const char ) throw( IMAGE::image_format_error , IMAGE::file_io_failed );
+  ~PNGimage() throw();
 
-	void close();
+  void open(const std::string &, const char) throw(IMAGE::image_format_error,
+                                                   IMAGE::file_io_failed);
 
-	void readImageRaster() throw( IMAGE::bad_alloc , IMAGE::image_format_error  , IMAGE::empty_image );
+  void close();
 
-	void writeRasterToImage() throw( IMAGE::image_format_error , IMAGE::empty_raster );
+  void readImageRaster() throw(IMAGE::bad_alloc, IMAGE::image_format_error,
+                               IMAGE::empty_image);
 
-}; //and of class PNGimage
+  void writeRasterToImage() throw(IMAGE::image_format_error,
+                                  IMAGE::empty_raster);
 
-}//end of namespace IMAGE
+}; // and of class PNGimage
 
+} // end of namespace IMAGE
 
 #endif
-
-
-
-
-
-
-
-
-
