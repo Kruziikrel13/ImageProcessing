@@ -16,7 +16,7 @@ INCLUDE = -I/home/centos/libraries/
 #defines for serial program
 DEFS = -DSERIAL 
 #erase files
-RM = /bin/rm -f
+RM = rm -f
 #object files
 S_OBJS =  TIFFimage.o JPEGimage.o PNGimage.o image.o  imageRaster.o serialImageProcessing.o main.o timer.o MemCheck.o 
 #program name
