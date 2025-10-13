@@ -1,6 +1,5 @@
 #include "image/img.h"
 #include "utils/timer.h"
-#include <dirent.h>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -31,8 +30,8 @@ int main(int argc, char** argv) {
 #endif
 
     // Total time timer
-    Timer totalTimer;
-    totalTimer.start();
+    CTimer totalTimer;
+    totalTimer.startTimer();
 
     std::cout << "************************************************************" << std::endl;
     std::cout << "*                      Serial execution                    *" << std::endl;
@@ -52,12 +51,12 @@ int main(int argc, char** argv) {
     std::string operation(argv[3]);
 
     // hot spot timer. Measures the part of code which will be parallelized
-    Timer parallelTimer;
+    CTimer parallelTimer;
 
     if (getDirFileNames(argv[1], imageName))
 
         try {
-            parallelTimer.start();
+            parallelTimer.startTimer();
             for (std::vector<std::string>::iterator it = imageName.begin(); it < imageName.end(); it++) {
 
                 std::cout << (*it) << "\n";
@@ -145,8 +144,8 @@ int main(int argc, char** argv) {
             exit(1);
         }
 
-    totalTimer.stop();
-    parallelTimer.stop();
+    parallelTimer.stopTimer();
+    totalTimer.stopTimer();
 
     std::cout << "\n\n\n";
 
@@ -164,8 +163,8 @@ int main(int argc, char** argv) {
     std::cout << "*                                                           *" << std::endl;
 
     std::cout.precision(6);
-    std::cout << "* Total execution time             :  " << totalTimer.getReal() << " sec           *" << std::endl;
-    std::cout << "* Parallel partial execution time  :  " << parallelTimer.getReal() << " sec           *" << std::endl;
+    std::cout << "* Total execution time             :  " << totalTimer.elapsedTime() << " sec           *" << std::endl;
+    std::cout << "* Parallel partial execution time  :  " << parallelTimer.elapsedTime() << " sec           *" << std::endl;
 
     std::cout << "*                                                           *" << std::endl;
     std::cout << "*                        END OF PROGRAM                     *" << std::endl;
