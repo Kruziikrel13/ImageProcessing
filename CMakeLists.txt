@@ -43,22 +43,13 @@ add_executable(${PROG} src/serial.cpp ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
 target_compile_definitions(${PROG} PUBLIC -DSERIAL)
 
-# if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
-#   message(STATUS "Configuring ${PROJECT_NAME} in Debug with CMake")
-#
-#   if(WITH_ASAN)
-#     message(STATUS "Enabling ASan")
-#
-#     target_link_libraries(${TARGETS})
-#     target_compile_options(${TARGETS} PUBLIC -fsanitize=address)
-#   endif()
-#
-#   add_compile_options(-fno-pie -fno-builtin)
-#   add_link_options(-no-pie -fno-builtin)
-# else()
-#   add_compile_options(-O3)
-#   message(STATUS "Configuring ${PROJECT_NAME} in Release with CMake")
-# endif()
-#
+if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
+  add_compile_options(-fno-pie -fno-builtin)
+  add_link_options(-no-pie -fno-builtin)
+else()
+  add_compile_options(-O3)
+  message(STATUS "Configuring ${PROJECT_NAME} in Release with CMake")
+endif()
+
 # find_package(spdlog REQUIRED)
 # target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)
