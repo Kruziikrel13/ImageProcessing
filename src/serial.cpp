@@ -15,7 +15,8 @@
 #endif
 
 int main(int argc, char** argv) {
-#ifdef DEBUG
+
+#if !defined(NDEBUG) && defined(MEMTRACE)
     MEM_ON();
     TRACE_OFF();
 #endif
@@ -165,7 +166,7 @@ int main(int argc, char** argv) {
 
     //////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef DEBUG
+#if !defined(NDEBUG) && defined(MEMTRACE)
     MEM_OFF();
 #endif
 
