@@ -13,6 +13,7 @@ project(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+add_definitions(-DSPDLOG_ACTIVE_LEVEL=$ENV{LOG_LEVEL})
 # add_definitions(-DMEMTRACE)
 add_compile_options(
   -Wall
@@ -55,7 +56,25 @@ target_sources(${PROG} PRIVATE ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
 target_compile_definitions(${PROG} PUBLIC -DSERIAL)
 
-endif()
+## Parallel
+set(PROG parallel)
+list(APPEND SOURCES
+      src/vlk/VulkanContext.cpp)
+add_executable(${PROG} src/parallel.cpp)
+target_sources(${PROG} PRIVATE ${SOURCES})
+target_compile_options(${PROG} PRIVATE -g)
 
-# find_package(spdlog REQUIRED)
-# target_link_libraries(${PROJECT_NAME} PRIVATE spdlog::spdlog)
+if ("$ENV{ASAN}" STREQUAL "ON")
+  target_compile_options(${PROG} PRIVATE -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O1)
+  target_link_options(${PROG} PRIVATE -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O1)
+endif()
+target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
+
+find_package(Vulkan REQUIRED)
+find_package(spdlog REQUIRED)
+target_include_directories(${PROG} PRIVATE ${Vulkan_INCLUDE_DIRS})
+target_link_libraries(${PROG} PRIVATE ${Vulkan_LIBRARIES} spdlog::spdlog)
+target_compile_definitions(${PROG} PRIVATE
+        VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1
+        VULKAN_HPP_NO_STRUCT_CONSTRUCTORS=1
+)

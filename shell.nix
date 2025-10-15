@@ -6,10 +6,28 @@ pkgs.mkShell {
     gcc
     clang-tools
     cmake
+    lldb
+    valgrind
 
     libtiff
     libjpeg
     libpng
     libz
+
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
+    vulkan-tools-lunarg
+    vulkan-validation-layers
+
+    spdlog
   ];
+
+  LD_LIBRARY_PATH = "${pkgs.vulkan-loader}/lib:${pkgs.vulkan-validation-layers}/lib";
+  VULKAN_SDK = "${pkgs.vulkan-headers}";
+  VK_LAYER_PATH = "${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
+
+  ASAN = "OFF";
+  LOG_LEVEL = 0; # 0 - Trace; 1 - Debug
+  LSAN_OPTIONS = "suppressions=${./asan.supp}";
 }

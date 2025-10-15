@@ -1,0 +1,2 @@
+leak:__pthread_once_slow
+leak:__GIT___pthread_once
