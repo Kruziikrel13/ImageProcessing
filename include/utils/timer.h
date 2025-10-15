@@ -4,11 +4,11 @@
 
 class CTimer {
   public:
-    void   startTimer();
-    void   stopTimer();
     static void printTimes(CTimer& timer);
+    void        startTimer();
+    void        stopTimer();
 
-    double elapsedTime();
+    double      elapsedTime();
 
   private:
     std::chrono::high_resolution_clock::time_point start;
