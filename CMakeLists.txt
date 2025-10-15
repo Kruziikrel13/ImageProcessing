@@ -30,6 +30,15 @@ set(CMAKE_EXECUTABLE_ENABLE_EXPORTS TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(include)
 
+if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
+  add_compile_options(-fno-pie -fno-builtin)
+  add_link_options(-no-pie -fno-builtin)
+else()
+  add_compile_options(-O3)
+  message(STATUS "Configuring ${PROJECT_NAME} in Release with CMake")
+endif()
+
+## Serial
 set(PROG serial)
 set(SOURCES
     src/shared.cpp
@@ -46,12 +55,6 @@ target_sources(${PROG} PRIVATE ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
 target_compile_definitions(${PROG} PUBLIC -DSERIAL)
 
-if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
-  add_compile_options(-fno-pie -fno-builtin)
-  add_link_options(-no-pie -fno-builtin)
-else()
-  add_compile_options(-O3)
-  message(STATUS "Configuring ${PROJECT_NAME} in Release with CMake")
 endif()
 
 # find_package(spdlog REQUIRED)
