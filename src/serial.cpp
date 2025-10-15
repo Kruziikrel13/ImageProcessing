@@ -147,6 +147,8 @@ int main(int argc, char** argv) {
     parallelTimer.stopTimer();
     totalTimer.stopTimer();
 
+    CTimer::printTimes(parallelTimer);
+
     std::cout << "\n\n\n";
 
     // final output

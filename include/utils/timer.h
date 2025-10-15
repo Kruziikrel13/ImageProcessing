@@ -3,11 +3,10 @@
 #include <chrono>
 
 class CTimer {
-    static void printTimes(CTimer& timer);
-
   public:
     void   startTimer();
     void   stopTimer();
+    static void printTimes(CTimer& timer);
 
     double elapsedTime();
 
