@@ -32,6 +32,7 @@ include_directories(include)
 
 set(PROG serial)
 set(SOURCES
+    src/shared.cpp
     src/image/image.cpp
     src/image/format/TIFFimage.cpp
     src/image/format/JPEGimage.cpp
