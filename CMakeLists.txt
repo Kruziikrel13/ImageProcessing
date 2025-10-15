@@ -41,7 +41,8 @@ set(SOURCES
     src/processing/serialImageProcessing.cpp
     src/utils/timer.cpp
     src/utils/MemCheck.cpp)
-add_executable(${PROG} src/serial.cpp ${SOURCES})
+add_executable(${PROG} src/serial.cpp)
+target_sources(${PROG} PRIVATE ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
 target_compile_definitions(${PROG} PUBLIC -DSERIAL)
 
