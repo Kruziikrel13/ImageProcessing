@@ -8,7 +8,6 @@
 #include <string>
 #include <unistd.h>
 #include <vector>
-#include <filesystem>
 
 #ifdef DEBUG
 #include "utils/MemCheck.h"
