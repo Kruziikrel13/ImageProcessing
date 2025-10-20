@@ -3,8 +3,6 @@
 PICTURES="pictures/"
 OUTPUT="output"
 
-set -x
-
 operations=(
   "-reverse"
   "-brightness 40"
