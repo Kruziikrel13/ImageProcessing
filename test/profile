@@ -2,6 +2,8 @@
 
 PICTURES="pictures/"
 OUTPUT="output"
+EXE="../build/serial"
+rm -rf "$OUTPUT"
 
 operations=(
   "-reverse"
@@ -14,7 +16,7 @@ operations=(
   "-rotate -left"
   "-rotate -right"
   "-zoom"
-  "-scale 20"
+  "-scale 2"
   "-blur 90"
 )
 
@@ -22,5 +24,10 @@ for op in "${operations[@]}"; do
   op_dir="$OUTPUT/${op//[ -]/}"
   mkdir -p "$op_dir"
   perf record --output="$op_dir/perf.data" \
-    -g --call-graph=dwarf -- ./build/serial "$PICTURES" "$op_dir/" $op
+    -g --call-graph=dwarf -- "$EXE" "$PICTURES" "$op_dir/" $op
+
+  if [ $? -ne 0 ]; then
+    echo "Operation $op failed." >&2
+    read -p "Press Enter to continue..."
+  fi
 done
