@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
 
     std::cout << "\n\n\n";
 
-    std::vector<std::string> imageName;
+    std::vector<std::string> images;
 
     std::stringstream        input(argv[4]);
     double                   factor;
