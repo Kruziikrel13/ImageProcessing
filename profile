@@ -21,6 +21,6 @@ operations=(
 for op in "${operations[@]}"; do
   op_dir="$OUTPUT/${op//[ -]/}"
   mkdir -p "$op_dir"
-  perf record --output="$op_dir/profile.data" \
+  perf record --output="$op_dir/perf.data" \
     -g --call-graph=dwarf -- ./build/serial "$PICTURES" "$op_dir/" $op
 done
