@@ -18,21 +18,21 @@ class CVulkanContext {
     // void                          createComputePipeline();
     // void                          createDescriptorPool();
 
-    vk::raii::Context             context;
-    vk::raii::Instance            instance            = nullptr;
-    vk::raii::PhysicalDevice      physicalDevice      = nullptr;
-    vk::raii::Device              device              = nullptr;
-    vk::raii::Queue               computeQueue        = nullptr;
-    vk::raii::CommandPool         commandPool         = nullptr; // Use this to create command buffers with which to operate
-    vk::raii::DescriptorSetLayout descriptorSetLayout = nullptr;
-    vk::raii::ShaderModule        computeShader       = nullptr;
-    vk::raii::PipelineLayout      pipelineLayout      = nullptr;
-    vk::raii::DescriptorPool      descriptorPool      = nullptr;
-    vk::raii::CommandBuffer       commandBuffer       = nullptr;
-    vk::raii::DescriptorSet       descriptorSet       = nullptr;
+    vk::raii::Context             m_context;
+    vk::raii::Instance            m_instance            = nullptr;
+    vk::raii::PhysicalDevice      m_physicalDevice      = nullptr;
+    vk::raii::Device              m_device              = nullptr;
+    vk::raii::Queue               m_computeQueue        = nullptr;
+    vk::raii::CommandPool         m_commandPool         = nullptr; // Use this to create command buffers with which to operate
+    vk::raii::DescriptorSetLayout m_descriptorSetLayout = nullptr;
+    vk::raii::ShaderModule        m_computeShader       = nullptr;
+    vk::raii::PipelineLayout      m_pipelineLayout      = nullptr;
+    vk::raii::DescriptorPool      m_descriptorPool      = nullptr;
+    vk::raii::CommandBuffer       m_commandBuffer       = nullptr;
+    vk::raii::DescriptorSet       m_descriptorSet       = nullptr;
 
-    vk::raii::Buffer              indexBuffer       = nullptr;
-    vk::raii::DeviceMemory        indexBufferMemory = nullptr;
+    vk::raii::Buffer              m_indexBuffer       = nullptr;
+    vk::raii::DeviceMemory        m_indexBufferMemory = nullptr;
 
-    uint32_t                      computeQueueFamilyIndex;
+    uint32_t                      m_computeQueueFamilyIndex;
 };

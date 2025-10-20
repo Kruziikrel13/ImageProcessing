@@ -26,7 +26,7 @@ void CVulkanContext::createInstance() {
 
     vk::InstanceCreateInfo        createInfo{.pApplicationInfo = &applicationInfo};
 
-    instance = vk::raii::Instance{context, createInfo};
+    m_instance = vk::raii::Instance{m_context, createInfo};
 
     SPDLOG_TRACE("Successfully created Vulkan instance.");
 }
@@ -34,7 +34,7 @@ void CVulkanContext::createInstance() {
 void CVulkanContext::pickPhysicalDevice() {
     SPDLOG_TRACE("Selecting physical device.");
 
-    std::vector<vk::raii::PhysicalDevice> devices = instance.enumeratePhysicalDevices();
+    std::vector<vk::raii::PhysicalDevice> devices = m_instance.enumeratePhysicalDevices();
     if (devices.empty()) {
         throw std::runtime_error("Failed to find GPUs with Vulkan support!");
     }
@@ -53,9 +53,9 @@ void CVulkanContext::pickPhysicalDevice() {
         std::vector<vk::QueueFamilyProperties> queueFamilyProperties = device.getQueueFamilyProperties();
         for (uint32_t i = 0; i < queueFamilyProperties.size(); i++) {
             if (queueFamilyProperties[i].queueFlags & vk::QueueFlagBits::eCompute) {
-                physicalDevice          = std::move(device);
-                computeQueueFamilyIndex = i;
-                deviceName              = deviceProperties.deviceName.data();
+                m_physicalDevice          = std::move(device);
+                m_computeQueueFamilyIndex = i;
+                deviceName                = deviceProperties.deviceName.data();
                 SPDLOG_DEBUG("Selected device with compute support: {}", deviceProperties.deviceName.data());
                 return;
             }
@@ -69,7 +69,7 @@ void CVulkanContext::createLogicalDevice() {
     SPDLOG_TRACE("Creating logical device.");
 
     float                     queuePriority = 1.0f;
-    vk::DeviceQueueCreateInfo qCreateInfo{.queueFamilyIndex = computeQueueFamilyIndex, .queueCount = 1, .pQueuePriorities = &queuePriority};
+    vk::DeviceQueueCreateInfo qCreateInfo{.queueFamilyIndex = m_computeQueueFamilyIndex, .queueCount = 1, .pQueuePriorities = &queuePriority};
 
     // Allow use of latest SPIR-V 1.4 shader modules
     // TODO: Check valid / necessary features and extensions
@@ -80,8 +80,8 @@ void CVulkanContext::createLogicalDevice() {
                                         .enabledExtensionCount   = static_cast<uint32_t>(extensionList.size()),
                                         .ppEnabledExtensionNames = extensionList.data()};
 
-    device       = vk::raii::Device(physicalDevice, createInfo);
-    computeQueue = vk::raii::Queue(device, computeQueueFamilyIndex, 0);
+    m_device       = vk::raii::Device(m_physicalDevice, createInfo);
+    m_computeQueue = vk::raii::Queue(m_device, m_computeQueueFamilyIndex, 0);
 
     SPDLOG_TRACE("Successfully created logical device.");
 }
@@ -89,9 +89,9 @@ void CVulkanContext::createLogicalDevice() {
 void CVulkanContext::createCommandPool() {
     SPDLOG_TRACE("Creating command pool.");
 
-    vk::CommandPoolCreateInfo poolCreateInfo{.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer, .queueFamilyIndex = computeQueueFamilyIndex};
+    vk::CommandPoolCreateInfo poolCreateInfo{.flags = vk::CommandPoolCreateFlagBits::eResetCommandBuffer, .queueFamilyIndex = m_computeQueueFamilyIndex};
 
-    commandPool = vk::raii::CommandPool(device, poolCreateInfo);
+    m_commandPool = vk::raii::CommandPool(m_device, poolCreateInfo);
 
     SPDLOG_TRACE("Successfully created command pool.");
 }
