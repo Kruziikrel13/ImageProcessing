@@ -45,19 +45,21 @@ int main(int argc, char** argv) {
         input >> factor;
     }
 
-    int         succeded = 0;
-    int         failed   = 0;
+    int succeded = 0;
+    int failed   = 0;
 
+    SPDLOG_TRACE("Getting operating from argv");
     std::string operation(argv[3]);
 
     // hot spot timer. Measures the part of code which will be parallelized
     CTimer parallelTimer;
 
-    if (getDirFileNames(argv[1], imageName))
+    SPDLOG_TRACE("Starting processing images in serial mode...");
+    if (getDirFileNames(argv[1], images))
 
         try {
             parallelTimer.startTimer();
-            for (std::vector<std::string>::iterator it = imageName.begin(); it < imageName.end(); it++) {
+            for (std::vector<std::string>::iterator it = images.begin(); it < images.end(); it++) {
 
                 std::cout << (*it) << "\n";
                 IMAGE::Image* oldImage = nullptr;
@@ -158,7 +160,7 @@ int main(int argc, char** argv) {
     std::cout << "*                          Results                          *" << std::endl;
 
     std::cout << std::setfill('x') << std::setw(20);
-    std::cout << "* total files      :  " << imageName.size() << "                                     *" << std::endl;
+    std::cout << "* total files      :  " << images.size() << "                                     *" << std::endl;
     std::cout << "* Succeded images  :  " << succeded << "                                     *" << std::endl;
     std::cout << "* Failed images    :  " << failed << "                                     *" << std::endl;
 
