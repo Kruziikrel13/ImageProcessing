@@ -13,7 +13,6 @@ project(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-add_definitions(-DSPDLOG_ACTIVE_LEVEL=$ENV{LOG_LEVEL})
 # add_definitions(-DMEMTRACE)
 add_compile_options(
   -Wall
@@ -32,11 +31,29 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(include)
 
 if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
-  add_compile_options(-fno-pie -fno-builtin)
-  add_link_options(-no-pie -fno-builtin)
+  add_compile_options(-g -fno-pie -fno-builtin)
+  add_link_options(-g -no-pie -fno-builtin)
+  add_definitions(-DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
+
+  if (TRACE)
+    add_compile_options(-O0)
+    add_link_options(-O0)
+    add_definitions(-DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE)
+  endif()
+
 else()
   add_compile_options(-O3)
   message(STATUS "Configuring ${PROJECT_NAME} in Release with CMake")
+endif()
+
+if (WITH_PROFILE)
+  add_compile_options(-pg)
+  add_link_options(-pg)
+endif()
+
+if (WITH_ASAN)
+  add_compile_options(-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O0)
+  add_link_options(-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O0)
 endif()
 
 ## Serial
@@ -65,16 +82,9 @@ list(APPEND SOURCES
       src/vlk/VulkanContext.cpp)
 add_executable(${PROG} src/parallel.cpp)
 target_sources(${PROG} PRIVATE ${SOURCES})
-target_compile_options(${PROG} PRIVATE -g)
-
-if ("$ENV{ASAN}" STREQUAL "ON")
-  target_compile_options(${PROG} PRIVATE -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O1)
-  target_link_options(${PROG} PRIVATE -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O1)
-endif()
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
 
 find_package(Vulkan REQUIRED)
-find_package(spdlog REQUIRED)
 target_include_directories(${PROG} PRIVATE ${Vulkan_INCLUDE_DIRS})
 target_link_libraries(${PROG} PRIVATE ${Vulkan_LIBRARIES} spdlog::spdlog)
 target_compile_definitions(${PROG} PRIVATE
