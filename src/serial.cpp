@@ -1,5 +1,6 @@
 #include "shared.h"
 #include "image/img.h"
+#include <spdlog/spdlog.h>
 #include "utils/timer.h"
 #include <iomanip>
 #include <iostream>
@@ -14,6 +15,11 @@
 #endif
 
 int main(int argc, char** argv) {
+#if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
+    spdlog::set_level(spdlog::level::trace);
+#elif SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
+    spdlog::set_level(spdlog::level::debug);
+#endif
 
 #if !defined(NDEBUG) && defined(MEMTRACE)
     MEM_ON();

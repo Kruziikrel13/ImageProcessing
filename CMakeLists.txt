@@ -56,6 +56,9 @@ target_sources(${PROG} PRIVATE ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
 target_compile_definitions(${PROG} PUBLIC -DSERIAL)
 
+find_package(spdlog REQUIRED)
+target_link_libraries(${PROG} PRIVATE spdlog::spdlog)
+
 ## Parallel
 set(PROG parallel)
 list(APPEND SOURCES
