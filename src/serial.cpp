@@ -38,9 +38,12 @@ int main(int argc, char** argv) {
 
     std::vector<std::string> images;
 
-    std::stringstream        input(argv[4]);
     double                   factor;
-    input >> factor;
+    if (argc == 5) {
+        SPDLOG_TRACE("Creating stringstream");
+        std::stringstream input(argv[4]);
+        input >> factor;
+    }
 
     int         succeded = 0;
     int         failed   = 0;
