@@ -114,7 +114,7 @@ namespace IMAGE {
         png_read_image(png_ptr, row_pointers);
 
         // rows are read from top to bottom
-        for (unsigned int i = 0, j = height - 1; i < height && j >= 0; i++, j--) {
+        for (int i = 0, j = height - 1; (unsigned int)i < height && j >= 0; i++, j--) {
             memcpy(&ptr[j * width * samples], row_pointers[i], width * samples);
             free(row_pointers[i]);
         }
