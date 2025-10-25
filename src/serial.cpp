@@ -55,6 +55,7 @@ int main(int argc, char** argv) {
     CTimer parallelTimer;
 
     SPDLOG_TRACE("Starting processing images in serial mode...");
+    // FIXME: Process images in multiple threads instead of serially
     if (getDirFileNames(argv[1], images))
 
         try {
@@ -141,8 +142,8 @@ int main(int argc, char** argv) {
             exit(1);
 
         } catch (...) {
-            std::cout << "cought unexpected exception...\n";
-            std::cout << "Exitig program...\n";
+            std::cout << "Caught unexpected exception...\n";
+            std::cout << "Exiting program...\n";
             exit(1);
         }
 

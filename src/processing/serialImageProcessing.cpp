@@ -2,14 +2,6 @@
 #include <algorithm>
 #include <cstring>
 
-// #include <cilk/cilk.h>
-// #include <cilk/cilk_api.h>
-
-/*#ifdef SERIAL
-        #include <cilk/cilk_stub.h>
-#endif
-*/
-
 namespace IMAGE {
 
     namespace PROCESS {
@@ -103,6 +95,7 @@ namespace IMAGE {
             raster.attachRaster(tempRaster);
         }
 
+        // FIXME: 31% exec time overall
         static void scaleLine(unsigned char* target, const unsigned char* source, unsigned int srcWidth, unsigned int trgWidth, unsigned int samples) {
 
             unsigned int intPart  = srcWidth / trgWidth;
@@ -111,7 +104,7 @@ namespace IMAGE {
 
             for (unsigned int i = 0; i < trgWidth; i++) {
                 for (unsigned int j = 0; j < samples; j++)
-                    *target++ = source[j];
+                    *target++ = source[j]; // FIXME: Takes up 12% exec time
 
                 source += intPart * samples;
                 E += fraqPart;
@@ -144,6 +137,7 @@ form its initial value assuming that the components are RGBor RGBA*/
             unsigned int       w      = raster.width_m;
             unsigned int       s      = raster.samples_per_pixel_m;
             IMAGE::ImageRaster temp;
+            // Takes a bit of program
             temp.createRaster(raster.width_m, raster.height_m, raster.samples_per_pixel_m);
 
             // sum of all the elements in the table step*step
@@ -156,10 +150,12 @@ form its initial value assuming that the components are RGBor RGBA*/
             unsigned int max_col = raster.width_m - factor - 1;
 
             // for each for
+            // FIXME: This takes up a lot of time, Can be parallelised with GPU
             for (unsigned int row = 0; row < raster.height_m; row++)
                 // for each column
                 for (unsigned int col = 0; col < raster.width_m; col++)
                     // for each color in every pixel
+                    //FIXME: Takes up a lot of time
                     for (unsigned int i = 0; i < raster.samples_per_pixel_m; i++) {
 
                         /*if the current pixel is in posiotion that the table step*step can be
@@ -190,15 +186,15 @@ form its initial value assuming that the components are RGBor RGBA*/
                             end_c = c;
                         }
                         for (signed int p = -r; p < end_r; p++)
-                            for (signed int k = -c; k < end_c; k++) {
-
+                            for (signed int k = -c; k < end_c; k++) { // FIXME: 22% of exec time
                                 counter++;
+                                //FIXME: Takes up 72% of exec time
                                 sum += raster.raster_m[((row + p) * w * s) + ((col + k) * s) + i];
                             }
                         sum /= counter;
                         temp.raster_m[(row * w * s) + (col * s) + i] = (unsigned char)sum;
-                        sum                                      = 0;
-                        counter                                  = 0;
+                        sum                                          = 0;
+                        counter                                      = 0;
                     }
 
             raster.attachRaster(temp);
@@ -223,7 +219,7 @@ Arguments ImageRaster and integer for percentage adjustment of brightness -100%
             for (unsigned int i = 0; i < raster.total_pixels_m * raster.samples_per_pixel_m; i += raster.samples_per_pixel_m) {
 
                 // increace brightness
-                if (brightness > 0) {
+                if (brightness > 0) { // FIXME: This code block takes up %12 exec time
                     (raster.raster_m[i] + brightness > 255) ? raster.raster_m[i] = 255 : raster.raster_m[i] += brightness;
                     (raster.raster_m[i + 1] + brightness > 255) ? raster.raster_m[i + 1] = 255 : raster.raster_m[i + 1] += brightness;
                     (raster.raster_m[i + 2] + brightness > 255) ? raster.raster_m[i + 2] = 255 : raster.raster_m[i + 2] += brightness;
@@ -301,11 +297,11 @@ component that higher than the highLimit.*/
             IMAGE::ImageRaster tempRaster;
             tempRaster.createRaster(raster.width_m, raster.height_m, raster.samples_per_pixel_m);
 
-            double       x_range = (double)x_end - x_start;
-            double       y_range = (double)y_end - y_start;
+            const double x_range = (double)x_end - x_start;
+            const double y_range = (double)y_end - y_start;
 
-            double       x_ratio = x_range / raster.width_m;
-            double       y_ratio = y_range / raster.height_m;
+            const double x_ratio = x_range / raster.width_m;
+            const double y_ratio = y_range / raster.height_m;
 
             unsigned int step = raster.width_m * raster.samples_per_pixel_m;
             // move pointer of raster to point( x_start , y_start )
@@ -313,6 +309,7 @@ component that higher than the highLimit.*/
             unsigned char* dest   = tempRaster.raster_m;
             source += (y_start * step) + (x_start * raster.samples_per_pixel_m);
 
+            // FIXME: Exec time here is around 36%
             for (unsigned int dest_y = 0; dest_y < raster.height_m; dest_y++) {
                 // which row in destination image to write
                 unsigned int   source_y = (unsigned int)(dest_y * y_ratio);

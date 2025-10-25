@@ -86,6 +86,7 @@ namespace IMAGE {
         jpeg_create_decompress(&decompressor);
         jpeg_stdio_src(&decompressor, imageFile_m);
         jpeg_read_header(&decompressor, true);
+        // FIXME: Takes up 48% exec time for brightness
         jpeg_start_decompress(&decompressor);
 
         row_stride = temp_width * decompressor.num_components;
