@@ -6,8 +6,8 @@
 namespace IMAGE {
 
     /*Public functions*/
-    Image::Image() noexcept {}
-    Image::~Image() noexcept {}
+    Image::Image() noexcept  = default;
+    Image::~Image() noexcept = default;
 
     Image* Image::createInstance(const std::string& s) {
 
