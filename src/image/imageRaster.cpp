@@ -2,38 +2,15 @@
 #include <iostream>
 #include <cstring>
 
-#ifdef CILK_PARALLEL
-#include <cilk/cilk.h>
-#include <cilk/cilk_api.h>
-#endif
-
-#ifdef OPENMP_PARALLEL
-#include <omp.h>
-#endif
-
-#ifdef DEBUG
-#include "MemCheck.h"
-#endif
-
 namespace IMAGE {
 
-#ifdef DEBUG
-    AutoCounter<ImageRaster> ImageRaster::counter;
-#endif
     // default contructor
 
-    ImageRaster::ImageRaster() noexcept : width_m(0), height_m(0), samples_per_pixel_m(0), total_pixels_m(0), raster_m(nullptr), has_raster_m(false) {
-#ifdef DEBUG
-        counter.increase();
-#endif
-    }
+    ImageRaster::ImageRaster() noexcept : width_m(0), height_m(0), samples_per_pixel_m(0), total_pixels_m(0), raster_m(nullptr), has_raster_m(false) {}
 
     // destructor .if there is a raster created for this object the momory should
     // be free with the destructor or a call to destroyRaster
     ImageRaster::~ImageRaster() noexcept {
-#ifdef DEBUG
-        counter.decrease();
-#endif
         // destroy the raster with an explicit call to the destroyRaster
         destroyRaster();
     }
@@ -62,22 +39,7 @@ namespace IMAGE {
             samples_per_pixel_m = copy.samples_per_pixel_m;
             total_pixels_m      = width_m * height_m;
 
-#ifdef SERIAL
             memcpy(raster_m, copy.raster_m, total_pixels_m * samples_per_pixel_m);
-#endif
-
-#ifdef CILK_PARALLEL
-            cilk_for(unsigned int i = 0; i < height_m; i++)
-                memcpy(&raster_m[i * width_m * samples_per_pixel_m], &copy.raster_m[i * width_m * samples_per_pixel_m], width_m * samples_per_pixel_m);
-#endif
-
-#ifdef OPENMP_PARALLEL
-#pragma omp parallel
-#pragma omp for
-            for (unsigned int i = 0; i < height_m; i++)
-                memcpy(&raster_m[i * width_m * samples_per_pixel_m], &copy.raster_m[i * width_m * samples_per_pixel_m], width_m * samples_per_pixel_m);
-
-#endif
 
             has_raster_m = true;
         } else

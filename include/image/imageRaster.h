@@ -1,9 +1,6 @@
 #pragma once
 
 #include "imgError.h"
-#ifdef DEBUG
-#include "../utils/autoCounter.h"
-#endif
 /*Every image object has one ImageRaster and every reference
 to width , height , samples per pixel and the raster pointer
 is made through the ImageRaster object.*/
@@ -77,10 +74,6 @@ namespace IMAGE {
         void allocateRaster();
 
         void copyRaster(const ImageRaster&) noexcept;
-
-#ifdef DEBUG
-        static AutoCounter<ImageRaster> counter;
-#endif
 
       public:
         // default constructor only to set the raster pointer to NULL

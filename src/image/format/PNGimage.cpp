@@ -3,32 +3,11 @@
 #include <cstdlib>
 #include <cstring>
 
-#ifdef CILK_PARALLEL
-#include <cilk/cilk.h>
-#include <cilk/cilk_api.h>
-#endif
-
-#ifdef OPENMP_PARALLEL
-#include <omp.h>
-#endif
-
 namespace IMAGE {
 
-#ifdef DEBUG
-    AutoCounter<PNGimage> PNGimage::counter;
-#endif
+    PNGimage::PNGimage() noexcept : imageFile_m(nullptr) {}
 
-    PNGimage::PNGimage() noexcept : imageFile_m(nullptr) {
-#ifdef DEBUG
-        counter.increase();
-#endif
-    }
-
-    PNGimage::~PNGimage() noexcept {
-#ifdef DEBUG
-        counter.decrease();
-#endif
-    }
+    PNGimage::~PNGimage() noexcept {}
 
     void PNGimage::open(const std::string& name, const char mode) {
 
@@ -42,7 +21,7 @@ namespace IMAGE {
 
         if (!imageFile_m)
             throw IMAGE::FileIoFailed("Could not open file " + name); // failed to
-                                                                        // open
+                                                                      // open
 
         // read mode
         if (mode == 'r') {
@@ -136,32 +115,10 @@ namespace IMAGE {
         png_read_image(png_ptr, row_pointers);
 
         // rows are read from top to bottom
-#ifdef SERIAL
         for (unsigned int i = 0, j = height - 1; i < height && j >= 0; i++, j--) {
             memcpy(&ptr[j * width * samples], row_pointers[i], width * samples);
             free(row_pointers[i]);
         }
-#endif
-
-#ifdef CILK_PARALLEL
-
-        cilk_for(unsigned int i = 0; i < height; i++) {
-            memcpy(&ptr[((height - 1) - i) * width * samples], row_pointers[i], width * samples);
-            free(row_pointers[i]);
-        }
-
-#endif
-
-#ifdef OPENMP_PARALLEL
-#pragma omp parallel
-#pragma omp for
-        for (unsigned int i = 0; i < height; i++) {
-            memcpy(&ptr[((height - 1) - i) * width * samples], row_pointers[i], width * samples);
-            free(row_pointers[i]);
-        }
-
-#endif
-
         free(row_pointers);
     }
 
@@ -201,24 +158,8 @@ namespace IMAGE {
         for (unsigned int y = 0; y < height; y++)
             row_pointers[y] = (png_byte*)malloc(png_get_rowbytes(png_ptr, info_ptr));
 
-#ifdef SERIAL
         for (unsigned int i = 0, j = height - 1; i < height; i++, j--)
             memcpy(row_pointers[i], &ptr[j * width * samples], width * samples);
-#endif
-
-#ifdef CILK_PARALLEL
-        cilk_for(unsigned int i = 0; i < height; i++) {
-            memcpy(row_pointers[i], &ptr[((height - 1) - i) * width * samples], width * samples);
-        }
-
-#endif
-
-#ifdef OPENMP_PARALLEL
-#pragma omp parallel
-#pragma omp for
-        for (unsigned int i = 0; i < height; i++)
-            memcpy(row_pointers[i], &ptr[((height - 1) - i) * width * samples], width * samples);
-#endif
 
         png_write_image(png_ptr, row_pointers);
 

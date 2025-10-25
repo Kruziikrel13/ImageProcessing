@@ -5,23 +5,11 @@
 
 namespace IMAGE {
 
-#ifdef DEBUG
-    AutoCounter<JPEGimage> JPEGimage::counter;
-#endif
-
     // public
 
-    JPEGimage::JPEGimage() noexcept : imageFile_m(nullptr) {
-#ifdef DEBUG
-        counter.increase();
-#endif
-    }
+    JPEGimage::JPEGimage() noexcept : imageFile_m(nullptr) {}
 
-    JPEGimage::~JPEGimage() noexcept {
-#ifdef DEBUG
-        counter.decrease();
-#endif
-    }
+    JPEGimage::~JPEGimage() noexcept {}
 
     void JPEGimage::open(const std::string& n, const char mode) {
 

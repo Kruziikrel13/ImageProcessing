@@ -26,9 +26,7 @@ namespace IMAGE {
         PNGimage& operator=(const PNGimage&) {
             return *this;
         }
-#ifdef DEBUG
-        static AutoCounter<PNGimage> counter;
-#endif
+
       public:
         PNGimage() noexcept;
 

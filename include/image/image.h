@@ -4,10 +4,6 @@
 #include "imgError.h"
 #include <string>
 
-#ifdef DEBUG
-#include "autoCounter.h"
-#endif
-
 /* Class Image is a base abstract class in order to work with
 multiple types of images that derive from this class
 */
@@ -23,9 +19,6 @@ namespace IMAGE {
         Image(const Image&);
 
         Image& operator=(const Image&);
-#ifdef DEBUG
-        static ::AutoCounter<Image> imageCounter;
-#endif
 
       protected:
         // name of the image

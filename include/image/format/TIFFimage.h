@@ -5,10 +5,6 @@
 #include "tiffio.h"
 #include <string>
 
-#ifdef DEBUG
-#include "autoCounter.h"
-#endif
-
 namespace IMAGE {
 
     /*TIFFimage class inherits from generic image class.TIFFimage should add all the
@@ -21,10 +17,6 @@ extra information and functionality to support the tiff format.
       private:
         // pointer to tiff file
         TIFF* imageFile_m;
-
-#ifdef DEBUG
-        static AutoCounter<TIFFimage> counter;
-#endif
 
       public:
         TIFFimage() noexcept;

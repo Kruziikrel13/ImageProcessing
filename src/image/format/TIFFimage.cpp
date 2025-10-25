@@ -4,23 +4,11 @@
 
 namespace IMAGE {
 
-#ifdef DEBUG
-    AutoCounter<TIFFimage> TIFFimage::counter;
-#endif
-
     // public
 
-    TIFFimage::TIFFimage() noexcept : imageFile_m(nullptr) {
-#ifdef DEBUG
-        counter.increase();
-#endif
-    }
+    TIFFimage::TIFFimage() noexcept : imageFile_m(nullptr) {}
 
-    TIFFimage::~TIFFimage() noexcept {
-#ifdef DEBUG
-        counter.decrease();
-#endif
-    }
+    TIFFimage::~TIFFimage() noexcept {}
 
     void TIFFimage::open(const std::string& n, const char mode) {
 

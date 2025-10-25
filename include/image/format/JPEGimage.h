@@ -17,10 +17,6 @@ namespace IMAGE {
 
         FILE* imageFile_m;
 
-#ifdef DEBUG
-        static AutoCounter<JPEGimage> counter;
-#endif
-
       public:
         JPEGimage() noexcept;
 

@@ -5,28 +5,12 @@
 #include <iostream>
 #include <string>
 
-#ifdef DEBUG
-#include "MemCheck.h"
-#endif
 
 namespace IMAGE {
 
-/*Public functions*/
-#ifdef DEBUG
-    AutoCounter<Image> Image::imageCounter;
-#endif
-    Image::Image() noexcept {
-
-#ifdef DEBUG
-        imageCounter.increase();
-#endif
-    }
-
-    Image::~Image() noexcept {
-#ifdef DEBUG
-        imageCounter.decrease();
-#endif
-    }
+    /*Public functions*/
+    Image::Image() noexcept {}
+    Image::~Image() noexcept {}
 
     Image* Image::createInstance(const std::string& s) {
 

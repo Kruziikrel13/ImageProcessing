@@ -6,20 +6,11 @@
 #include <iostream>
 #include <cstdlib>
 
-#ifndef NDEBUG
-#include "utils/MemCheck.h"
-#endif
-
 int main(int argc, char** argv) {
 #if SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_TRACE
     spdlog::set_level(spdlog::level::trace);
 #elif SPDLOG_ACTIVE_LEVEL <= SPDLOG_LEVEL_DEBUG
     spdlog::set_level(spdlog::level::debug);
-#endif
-
-#if !defined(NDEBUG) && defined(MEMTRACE)
-    MEM_ON();
-    TRACE_OFF();
 #endif
 
     CTimer totalTimer;
@@ -163,10 +154,6 @@ int main(int argc, char** argv) {
     std::cout << "*                                                           *" << std::endl;
     std::cout << "*                        END OF PROGRAM                     *" << std::endl;
     std::cout << "*************************************************************" << std::endl;
-
-#if !defined(NDEBUG) && defined(MEMTRACE)
-    MEM_OFF();
-#endif
 
     return EXIT_SUCCESS;
 }
