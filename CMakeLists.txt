@@ -75,7 +75,7 @@ set(SOURCES
 add_executable(${PROG} src/serial.cpp)
 target_sources(${PROG} PRIVATE ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
-target_compile_definitions(${PROG} PUBLIC -DSERIAL)
+target_precompile_headers(${PROG} PRIVATE include/pch/pch.hpp)
 
 find_package(spdlog REQUIRED)
 target_link_libraries(${PROG} PRIVATE spdlog::spdlog)
@@ -95,3 +95,4 @@ target_compile_definitions(${PROG} PRIVATE
         VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1
         VULKAN_HPP_NO_STRUCT_CONSTRUCTORS=1)
 add_dependencies(${PROG} processors)
+target_precompile_headers(${PROG} PRIVATE include/pch/pch.hpp)

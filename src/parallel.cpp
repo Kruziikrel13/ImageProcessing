@@ -2,8 +2,6 @@
 #include "shared.h"
 #include "utils/timer.h"
 #include "image/img.h"
-#include <spdlog/spdlog.h>
-#include <iostream>
 #include <cstdlib>
 
 int main(int argc, char** argv) {

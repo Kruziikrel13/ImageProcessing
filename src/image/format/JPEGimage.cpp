@@ -1,5 +1,4 @@
 #include "image/format/JPEGimage.h"
-#include <iostream>
 #include <cstdlib>
 #include <cstring>
 

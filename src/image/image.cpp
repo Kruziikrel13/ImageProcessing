@@ -2,9 +2,6 @@
 #include "image/format/JPEGimage.h"
 #include "image/format/PNGimage.h"
 #include "image/format/TIFFimage.h"
-#include <iostream>
-#include <string>
-
 
 namespace IMAGE {
 

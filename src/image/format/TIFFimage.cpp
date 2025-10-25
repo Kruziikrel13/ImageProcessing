@@ -1,5 +1,4 @@
 #include "image/format/TIFFimage.h"
-#include <iostream>
 #include <string>
 
 namespace IMAGE {

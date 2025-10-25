@@ -1,5 +1,4 @@
 #include "image/imageRaster.h"
-#include <iostream>
 #include <cstring>
 
 namespace IMAGE {

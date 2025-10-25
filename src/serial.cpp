@@ -1,12 +1,9 @@
 #include "shared.h"
 #include "image/img.h"
-#include <spdlog/spdlog.h>
 #include "utils/timer.h"
 #include <iomanip>
-#include <iostream>
 #include <sstream>
 #include <cstdlib>
-#include <string>
 #include <unistd.h>
 
 int main(int argc, char** argv) {

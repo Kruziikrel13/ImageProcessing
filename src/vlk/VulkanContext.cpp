@@ -1,5 +1,4 @@
 #include "vlk/VulkanContext.h"
-#include <spdlog/spdlog.h>
 #include <stdexcept>
 
 CVulkanContext::CVulkanContext() {

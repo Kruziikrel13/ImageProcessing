@@ -1,5 +1,4 @@
 #include "image/format/PNGimage.h"
-#include <iostream>
 #include <cstdlib>
 #include <cstring>
 
