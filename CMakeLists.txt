@@ -29,6 +29,7 @@ add_compile_options(
 set(CMAKE_EXECUTABLE_ENABLE_EXPORTS TRUE)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories(include)
+include(cmake/shaders.cmake)
 
 if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
   add_compile_options(-g -fno-pie -fno-builtin)
@@ -56,6 +57,8 @@ if (ASAN)
   add_compile_options(-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O0)
   add_link_options(-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O0)
 endif()
+
+add_slang_shader(processors shaders/processors.slang ENTRIES blurCompute)
 
 ## Serial
 set(PROG serial)
@@ -90,5 +93,5 @@ target_include_directories(${PROG} PRIVATE ${Vulkan_INCLUDE_DIRS})
 target_link_libraries(${PROG} PRIVATE ${Vulkan_LIBRARIES} spdlog::spdlog)
 target_compile_definitions(${PROG} PRIVATE
         VULKAN_HPP_DISPATCH_LOADER_DYNAMIC=1
-        VULKAN_HPP_NO_STRUCT_CONSTRUCTORS=1
-)
+        VULKAN_HPP_NO_STRUCT_CONSTRUCTORS=1)
+add_dependencies(${PROG} processors)
