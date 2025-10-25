@@ -43,15 +43,16 @@ if(CMAKE_BUILD_TYPE MATCHES Debug OR CMAKE_BUILD_TYPE MATCHES DEBUG)
 
 else()
   add_compile_options(-O3)
+  add_link_options(-O3)
   message(STATUS "Configuring ${PROJECT_NAME} in Release with CMake")
 endif()
 
-if (WITH_PROFILE)
+if (PROFILE)
   add_compile_options(-pg)
   add_link_options(-pg)
 endif()
 
-if (WITH_ASAN)
+if (ASAN)
   add_compile_options(-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O0)
   add_link_options(-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O0)
 endif()

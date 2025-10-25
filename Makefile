@@ -1,25 +1,25 @@
 TRACE?=OFF
+PROFILE?=OFF
+ASAN?=OFF
+
+CONFIGURE=cmake --no-warn-unused-cli -S . -B ./build \
+					-DASAN:STRING=${ASAN} -DTRACE:STRING=${TRACE} -DPROFILE:STRING=${PROFILE} \
+					-DCMAKE_BUILD_TYPE:STRING
+BUILD=cmake --build ./build --target all -j`nproc 2>/dev/null || getconf NPROCESSORS_CONF` --config
+
 
 stub:
 	@echo "Do not run $(MAKE) directly without any arguments."
 
 release:
-	cmake --no-warn-unused-cli -DCMAKE_BUILD_TYPE:STRING=Release -S . -B ./build
-	cmake --build ./build --config Release --target all -j`nproc 2>/dev/null || getconf NPROCESSORS_CONF`
+	$(CONFIGURE)=Release
+	$(BUILD) Release
 
 debug:
-	cmake --no-warn-unused-cli -DTRACE:STRING=${TRACE} -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_INSTALL_PREFIX:STRING=${PREFIX} -S . -B ./build
-	cmake --build ./build --config Debug --target all -j`nproc 2>/dev/null || getconf NPROCESSORS_CONF`
+	$(CONFIGURE)=Debug
+	$(BUILD) Debug
 
-profile:
-	cmake --no-warn-unused-cli -DTRACE:STRING=${TRACE} -DCMAKE_BUILD_TYPE:STRING=Debug -DWITH_PROFILE:STRING=True -DCMAKE_INSTALL_PREFIX:STRING=${PREFIX} -S . -B ./build
-	cmake --build ./build --config Debug --target all -j`nproc 2>/dev/null || getconf NPROCESSORS_CONF`
-
-asan:
-	cmake --no-warn-unused-cli -DTRACE:STRING=${TRACE} -DCMAKE_BUILD_TYPE:STRING=Debug -DWITH_ASAN:STRING=True -S . -B ./build
-	cmake --build ./build --config Debug --target all
-
-clear:
+clean:
 	rm -rf build/
 
 reset:
