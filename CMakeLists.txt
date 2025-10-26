@@ -86,6 +86,9 @@ add_executable(${PROG} src/parallel.cpp)
 target_sources(${PROG} PRIVATE ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
 
+find_package(OpenMP REQUIRED)
+target_link_libraries(${PROG} PRIVATE OpenMP::OpenMP_CXX)
+
 find_package(Vulkan REQUIRED)
 target_include_directories(${PROG} PRIVATE ${Vulkan_INCLUDE_DIRS})
 target_link_libraries(${PROG} PRIVATE ${Vulkan_LIBRARIES} spdlog::spdlog)

@@ -22,6 +22,8 @@ pkgs.mkShell {
       };
     })
 
+    llvmPackages.openmp
+
     libtiff
     libjpeg
     libpng
