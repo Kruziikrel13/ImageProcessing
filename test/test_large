@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-
-PICTURES="pictures.large"
+PICTURES="${PICTURES:-test/pictures.large}"
 OUTPUT="output/${PICTURES}"
 rm -rf "$OUTPUT"
 
@@ -34,8 +33,8 @@ function run_test() {
   done
 }
 
-run_test "../build/serial"
-run_test "../build/parallel"
+run_test "./serial"
+run_test "./parallel"
 
 for op in "${operations[@]}"; do
     op_dir_serial="$OUTPUT/serial/${op//[ -]/}"
