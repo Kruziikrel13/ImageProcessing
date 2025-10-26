@@ -13,7 +13,6 @@ project(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-# add_definitions(-DMEMTRACE)
 add_compile_options(
   -Wall
   -Wextra
@@ -70,8 +69,7 @@ set(SOURCES
     src/image/format/PNGimage.cpp
     src/image/imageRaster.cpp
     src/processing/serialImageProcessing.cpp
-    src/utils/timer.cpp
-    src/utils/MemCheck.cpp)
+    src/utils/timer.cpp)
 add_executable(${PROG} src/serial.cpp)
 target_sources(${PROG} PRIVATE ${SOURCES})
 target_link_libraries(${PROG} PRIVATE tiff jpeg png z)
