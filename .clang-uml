@@ -1,0 +1,34 @@
+compilation_database_dir: build
+output_directory: diagrams
+
+diagrams:
+  class_diagrams:
+    type: class
+    glob:
+      - include/**/*.h
+      - src/**/*.cpp
+    exclude:
+      namespaces:
+        - std
+        - spdlog
+      elements:
+        - CVulkanContext
+        - IMAGE::BadAlloc
+        - IMAGE::ImageFormatError
+        - IMAGE::NotSupportedFormat
+        - IMAGE::InvalidArgument
+        - IMAGE::FileIoFailed
+        - IMAGE::EmptyRaster
+        - IMAGE::EmptyImage
+    comment_parser: clang
+  sequence_diagrams:
+    type: sequence
+    glob:
+      - include/**/*.h
+      - src/**/*.cpp
+    exclude:
+      namespaces:
+        - std
+        - spdlog
+    from:
+      - function: "main(int,char **)"
