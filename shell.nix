@@ -29,6 +29,8 @@ pkgs.mkShell {
 
     vulkan-headers
     spdlog
+    shaderc
+    shader-slang
   ];
 
   LD_LIBRARY_PATH = "${pkgs.vulkan-loader}/lib:${pkgs.vulkan-validation-layers}/lib";
