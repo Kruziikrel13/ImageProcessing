@@ -37,7 +37,5 @@ pkgs.mkShell {
   VULKAN_SDK = "${pkgs.vulkan-headers}";
   VK_LAYER_PATH = "${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
 
-  ASAN = "OFF";
-  LOG_LEVEL = 0; # 0 - Trace; 1 - Debug
   LSAN_OPTIONS = "suppressions=${./asan.supp}";
 }
