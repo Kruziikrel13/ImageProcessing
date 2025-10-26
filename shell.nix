@@ -28,11 +28,6 @@ pkgs.mkShell {
     libz
 
     vulkan-headers
-    vulkan-loader
-    vulkan-tools
-    vulkan-tools-lunarg
-    vulkan-validation-layers
-
     spdlog
   ];
 
