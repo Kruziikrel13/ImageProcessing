@@ -19,14 +19,13 @@ operations=(
   "-blur 90"
 )
 
-
 function run_test() {
   local exe="$1"
   for op in "${operations[@]}"; do
     op_dir="$OUTPUT/$(basename $exe)/${op//[ -]/}"
     mkdir -p "$op_dir"
-    perf record --output="$op_dir/perf.data" \
-      -g --call-graph=dwarf -- "$exe" "$PICTURES/" "$op_dir/" $op
+
+    "$exe" "$PICTURES/" "$op_dir/" $op
 
 
     if [ $? -ne 0 ]; then
@@ -38,3 +37,19 @@ function run_test() {
 
 run_test "../build/serial"
 run_test "../build/parallel"
+
+for op in "${operations[@]}"; do
+    op_dir_serial="$OUTPUT/serial/${op//[ -]/}"
+    op_dir_parallel="$OUTPUT/parallel/${op//[ -]/}"
+    for file in "$op_dir_serial"/*; do
+      filename=$(basename "$file")
+      file_parallel="$op_dir_parallel/$filename"
+      if [ -f "$file_parallel" ]; then
+        if ! diff -q "$file" "$file_parallel" > /dev/null; then
+          echo "Difference found in $op: $filename"
+        fi
+      else
+        echo "File missing in parallel: $file_parallel"
+      fi
+    done
+done
