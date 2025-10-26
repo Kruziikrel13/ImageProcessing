@@ -31,6 +31,7 @@ pkgs.mkShell {
     libz
 
     vulkan-headers
+    vulkan-loader
     spdlog
     shaderc
     shader-slang

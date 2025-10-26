@@ -48,6 +48,7 @@ Build tools and library dependencies.
 - [gnumake](https://www.gnu.org/software/make/)
 - [CMake >= v3.30](https://cmake.org/)
 - [Vulkan SDK](https://github.com/KhronosGroup/Vulkan-Headers)
+- [Vulkan Loader](https://github.com/KhronosGroup/Vulkan-Loader)
 - [Shader Slang](https://github.com/shader-slang/slang)
 
 ### Libraries
