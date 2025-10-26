@@ -1,3 +1,4 @@
+# Disregard this file. This is just a Nix shell definition for automatically creating a development environment and only has use if on the NixOS operating system.
 {
   pkgs ? import <nixpkgs> { },
 }:
