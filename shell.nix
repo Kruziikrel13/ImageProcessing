@@ -8,6 +8,19 @@ pkgs.mkShell {
     cmake
     lldb
     valgrind
+    perf
+    hotspot
+    clang-analyzer
+    mermaid-cli
+    (clang-uml.overrideAttrs rec {
+      version = "0.6.2";
+      src = fetchFromGitHub {
+        owner = "bkryza";
+        repo = "clang-uml";
+        rev = version;
+        hash = "sha256-hGjLOyduTc+yOQhO5gDKNfY0fDvbUfvF0FrdjrDheyw=";
+      };
+    })
 
     libtiff
     libjpeg
