@@ -19,6 +19,24 @@ debug:
 	$(CONFIGURE)=Debug
 	$(BUILD) Debug
 
+staging: all
+	rm -rf staging
+	mkdir -p staging/source
+
+	@echo "Copying binaries to staging/"
+	cp build/{parallel,serial} staging
+	cp -r build/shaders staging/
+
+	@echo "Copying source files to staging/source/"
+	cp CMakeLists.txt Makefile README.md VERSION .clang-format .clang-tidy staging/source/
+	cp -r src/ include/ cmake/ shaders/ staging/source/
+
+	@echo "Creating test archives"
+	cp -r test staging/
+
+staging-archive: staging
+	@echo Have you remembered to include the report PDF in staging prior to archiving?
+	tar -czf staging.tar.gz staging
 
 .PHONY: clean
 clean:
