@@ -19,6 +19,8 @@ debug:
 	$(CONFIGURE)=Debug
 	$(BUILD) Debug
 
+
+.PHONY: clean
 clean:
 	rm -rf build/
 
@@ -26,7 +28,7 @@ reset:
 	git clean -ffdx
 
 all:
-	$(MAKE) clear
+	$(MAKE) clean
 	$(MAKE) release
 
 nix:
