@@ -44,11 +44,12 @@ int main(int argc, char** argv) {
 
     SPDLOG_TRACE("Starting processing images in serial mode...");
 
+    // Get maximum number of threads able to be used in main program loop.
     unsigned int imagesInParallel = omp_get_max_threads();
     unsigned int counter          = 0;
     unsigned int parallelIters    = imagesInParallel;
 
-    // FIXME: Process images in multiple threads instead of serially
+    // Main Program Loop parallelized with OpenMP, process images in blocks (size of which is maximum number of available threads imagesInParallel)
     if (getDirFileNames(argv[1], images))
         try {
             parallelTimer.startTimer();
@@ -57,6 +58,8 @@ int main(int argc, char** argv) {
                 parallelIters = imagesInParallel;
                 if (counter > images.size()) {
                     parallelIters = images.size() - (counter - imagesInParallel);
+
+                // Run below loop for each image in directory... parallelized to process the images in a set
 #pragma omp parallel for
                     for (unsigned int i = 0; i < parallelIters; i++) {
                         std::cout << (*(it + i)) << "\n";
