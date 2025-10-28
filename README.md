@@ -31,6 +31,9 @@ $ make all
 ```
 The resultant built programs and artefacts will all be located in `build/`
 
+> [!NOTE]
+> Running `make staging` will create a clean directory that is has created a directory layout that running ./test/test is guaranteed to work in. (Ensure that pictures.small and pictures.large are present in the top level directory)
+
 Serial implementation
 --------------------
 
