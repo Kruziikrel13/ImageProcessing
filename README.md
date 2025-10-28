@@ -32,7 +32,9 @@ $ make all
 The resultant built programs and artefacts will all be located in `build/`
 
 #### Staging / Cleaned Build
-You can also run the below to create a clean application directory with shaders, test and the executable files all in an easily workable directory structure.
+> [!NOTE]
+> You can also run the below to create a clean application directory with shaders, test and the executable files all in an easily workable directory structure.
+
 ```sh
 $ make staging
 ```
