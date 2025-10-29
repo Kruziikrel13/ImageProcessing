@@ -34,9 +34,12 @@ staging: all
 	@echo "Creating test archives"
 	cp -r test staging/
 
-staging-archive: staging
+staging-archive:
 	@echo Have you remembered to include the report PDF in staging prior to archiving?
-	tar -czf staging.tar.gz staging
+	@if [ ! -d staging ]; then \
+		$(MAKE) staging; \
+	fi
+	zip -rv staging.zip staging
 
 .PHONY: clean
 clean:
