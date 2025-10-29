@@ -14,6 +14,10 @@
     LSAN_OPTIONS = "suppressions=${./asan.supp}";
   };
   packages = with pkgs; [
+    zip
+    perf
+    flamegraph
+
     libtiff
     libjpeg
     libpng
