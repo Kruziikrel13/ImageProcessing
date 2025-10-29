@@ -6,6 +6,7 @@ parallel
 build/
 staging/
 pictures*/
+*.zip
 
 # Devenv
 .devenv*
