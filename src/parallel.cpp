@@ -53,89 +53,82 @@ int main(int argc, char** argv) {
     if (getDirFileNames(argv[1], images))
         try {
             parallelTimer.startTimer();
-            for (std::vector<std::string>::iterator it = images.begin(); it < images.end(); it += imagesInParallel) {
-                counter += imagesInParallel;
-                parallelIters = imagesInParallel;
-                if (counter > images.size()) {
-                    parallelIters = images.size() - (counter - imagesInParallel);
+#pragma omp parallel for
+            for (std::vector<std::string>::iterator it = images.begin(); it < images.end(); it++) {
 
                 // Run below loop for each image in directory... parallelized to process the images in a set
-#pragma omp parallel for
-                    for (unsigned int i = 0; i < parallelIters; i++) {
-                        std::cout << (*(it + i)) << "\n";
-                        IMAGE::Image* oldImage = nullptr;
-                        IMAGE::Image* newImage = nullptr;
-                        std::string   oldName  = argv[1] + (*(it + i));
-                        std::string   newName  = argv[2] + (*(it + i));
-                        try {
+                std::cout << (*it) << "\n";
+                IMAGE::Image* oldImage = nullptr;
+                IMAGE::Image* newImage = nullptr;
+                std::string   oldName  = argv[1] + (*it);
+                std::string   newName  = argv[2] + (*it);
+                try {
 
-                            oldImage = IMAGE::Image::createInstance(oldName);
-                            newImage = IMAGE::Image::createInstance(newName);
+                    oldImage = IMAGE::Image::createInstance(oldName);
+                    newImage = IMAGE::Image::createInstance(newName);
 
-                            ////////////////////
-                            try {
-                                oldImage->open(oldName, 'r');
-                                newImage->open(newName, 'w');
-                                oldImage->readImageRaster();
-                                newImage->raster.createRaster(oldImage->raster);
+                    ////////////////////
+                    try {
+                        oldImage->open(oldName, 'r');
+                        newImage->open(newName, 'w');
+                        oldImage->readImageRaster();
+                        newImage->raster.createRaster(oldImage->raster);
 
-                                // check which operation to do
-                                if (operation == REVERSE) {
-                                    IMAGE::PROCESS::reverseColor(newImage->raster);
-                                } else if (operation == BRIGHTNESS) {
-                                    IMAGE::PROCESS::adjustBrightness(newImage->raster, atoi(argv[4]));
-                                } else if (operation == CONTRAST) {
-                                    IMAGE::PROCESS::adjustContrast(newImage->raster, atoi(argv[4]));
-                                } else if (operation == RGB2GREY) {
-                                    IMAGE::FILTERS::convertRGB2GREY(newImage->raster, atoi(argv[4]));
-                                } else if (operation == GREY2RGB) {
-                                    IMAGE::FILTERS::convertGREY2RGB(newImage->raster);
-                                } else if (operation == RGB2BW) {
-                                    IMAGE::FILTERS::convertRGB2BW(newImage->raster);
-                                } else if (operation == RGB2SEPIA) {
-                                    IMAGE::FILTERS::convertRGB2SEPIA(newImage->raster);
-                                } else if (operation == ROTATE) {
-                                    IMAGE::PROCESS::rotateImage(newImage->raster, argv[4]);
-                                } else if (operation == ZOOM) {
-                                    IMAGE::PROCESS::zoomImage(newImage->raster, 1, 1, 400, 300);
-                                } else if (operation == SCALE) {
-                                    IMAGE::PROCESS::scaleImage(newImage->raster, factor);
-                                } else if (operation == BLUR) {
-                                    IMAGE::PROCESS::blurImage(newImage->raster, atoi(argv[4]));
-                                } else {
-                                    std::cout << "Not a valid operation \n";
-                                    exit(0);
-                                }
-
-                                newImage->writeRasterToImage();
-                                succeded++;
-
-                            } catch (IMAGE::FileIoFailed& e) {
-                                std::cout << e.what() << "\n";
-                                failed++;
-                            } catch (IMAGE::ImageFormatError& e) {
-                                std::cout << e.what() << "\n";
-                                failed++;
-                            } catch (IMAGE::EmptyImage& e) {
-                                std::cout << e.what() << "\n";
-                                failed++;
-                            } catch (IMAGE::EmptyRaster& e) {
-                                std::cout << e.what() << "\n";
-                                failed++;
-                            }
-
-                            oldImage->close();
-                            newImage->close();
-                            delete oldImage;
-                            delete newImage;
-
-                        } catch (IMAGE::NotSupportedFormat& e) {
-                            std::cout << e.what() << "\n";
-                            failed++;
+                        // check which operation to do
+                        if (operation == REVERSE) {
+                            IMAGE::PROCESS::reverseColor(newImage->raster);
+                        } else if (operation == BRIGHTNESS) {
+                            IMAGE::PROCESS::adjustBrightness(newImage->raster, atoi(argv[4]));
+                        } else if (operation == CONTRAST) {
+                            IMAGE::PROCESS::adjustContrast(newImage->raster, atoi(argv[4]));
+                        } else if (operation == RGB2GREY) {
+                            IMAGE::FILTERS::convertRGB2GREY(newImage->raster, atoi(argv[4]));
+                        } else if (operation == GREY2RGB) {
+                            IMAGE::FILTERS::convertGREY2RGB(newImage->raster);
+                        } else if (operation == RGB2BW) {
+                            IMAGE::FILTERS::convertRGB2BW(newImage->raster);
+                        } else if (operation == RGB2SEPIA) {
+                            IMAGE::FILTERS::convertRGB2SEPIA(newImage->raster);
+                        } else if (operation == ROTATE) {
+                            IMAGE::PROCESS::rotateImage(newImage->raster, argv[4]);
+                        } else if (operation == ZOOM) {
+                            IMAGE::PROCESS::zoomImage(newImage->raster, 1, 1, 400, 300);
+                        } else if (operation == SCALE) {
+                            IMAGE::PROCESS::scaleImage(newImage->raster, factor);
+                        } else if (operation == BLUR) {
+                            IMAGE::PROCESS::blurImage(newImage->raster, atoi(argv[4]));
+                        } else {
+                            std::cout << "Not a valid operation \n";
+                            exit(0);
                         }
-                    } // end of pragma_omp
-                } // end of for
-            }
+
+                        newImage->writeRasterToImage();
+                        succeded++;
+
+                    } catch (IMAGE::FileIoFailed& e) {
+                        std::cout << e.what() << "\n";
+                        failed++;
+                    } catch (IMAGE::ImageFormatError& e) {
+                        std::cout << e.what() << "\n";
+                        failed++;
+                    } catch (IMAGE::EmptyImage& e) {
+                        std::cout << e.what() << "\n";
+                        failed++;
+                    } catch (IMAGE::EmptyRaster& e) {
+                        std::cout << e.what() << "\n";
+                        failed++;
+                    }
+
+                    oldImage->close();
+                    newImage->close();
+                    delete oldImage;
+                    delete newImage;
+
+                } catch (IMAGE::NotSupportedFormat& e) {
+                    std::cout << e.what() << "\n";
+                    failed++;
+                }
+            } // end of for
         } catch (IMAGE::BadAlloc& e) {
             std::cout << e.what() << std::endl;
             std::cout << "Exiting program...\n";
