@@ -42,12 +42,7 @@ int main(int argc, char** argv) {
     // hot spot timer. Measures the part of code which will be parallelized
     CTimer parallelTimer;
 
-    SPDLOG_TRACE("Starting processing images in serial mode...");
-
-    // Get maximum number of threads able to be used in main program loop.
-    unsigned int imagesInParallel = omp_get_max_threads();
-    unsigned int counter          = 0;
-    unsigned int parallelIters    = imagesInParallel;
+    SPDLOG_TRACE("Starting processing images in parallel mode...");
 
     // Main Program Loop parallelized with OpenMP, process images in blocks (size of which is maximum number of available threads imagesInParallel)
     if (getDirFileNames(argv[1], images))
